@@ -1,7 +1,6 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Image, Text, ScrollView, Dimensions } from 'react-native';
-import DropDownPicker, { ValueType } from 'react-native-dropdown-picker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Appbar, Checkbox } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,12 +17,12 @@ import { toastError, toastSuccess, toastValidation } from '../../../utils/toast-
 interface Item {
     id: number,
     siteName: string
-  }
-  
-  interface ListItem {
+}
+
+interface ListItem {
     label: string,
     value: string
-  }
+}
 
 interface Params {
     name: string,
@@ -54,25 +53,25 @@ function StepFair() {
 
     setLocale({
         mixed: {
-          required: 'A lista de ${path} deve ser preenchida.',
+            required: 'A lista de ${path} deve ser preenchida.',
         }
     });
 
     const validSchema = yup.object().shape({
         feiras: yup.array().of(yup.number()).required()
-    });   
+    });
 
     useEffect(() => {
         api.get("/fairs").then((response) => {
-          const { data } = response;
-          setItems(data.map((item: Item): ListItem => ({
-            label: item.siteName + '', 
-            value: item.id + ''
-          })));        
+            const { data } = response;
+            setItems(data.map((item: Item): ListItem => ({
+                label: item.siteName + '',
+                value: item.id + ''
+            })));
         });
-      }, []);
+    }, []);
 
-    async function handleSubmit(){  
+    async function handleSubmit() {
         validSchema.validate({ feiras: selectedItems }).then(valid => {
             api.post('/customers', {
                 name: routeParams.name.trim(),
@@ -81,21 +80,21 @@ function StepFair() {
                 customerPassword: routeParams.password.trim(),
                 idsProduct: routeParams.idsProduct,
                 idsFair: selectedItems.map(value => ({ idFair: value })),
-            }).then(response => {                
+            }).then(response => {
                 api.post('/auth', {
-                    email: routeParams.email, 
+                    email: routeParams.email,
                     customerPassword: routeParams.password,
                 }).then(async response => {
                     await AsyncStorage.setItem('@storage_Key', response.data.tipo + ' ' + response.data.token);
                     await AsyncStorage.setItem('@storage_Id', String(response.data.id));
-                    
-                    toastSuccess('Cadastro realizado com sucesso');                   
-                    
-                    if(checked) {                       
+
+                    toastSuccess('Cadastro realizado com sucesso');
+
+                    if (checked) {
                         handleNavigationToLocality();
-                        return;                        
+                        return;
                     }
-                    
+
                     handleNavigationToMain();
                 })
             }).catch(error => {
@@ -104,57 +103,57 @@ function StepFair() {
         }).catch(function (err) {
             err.errors.map((error: any) => {
                 toastValidation(`${error as string}`);
-            });            
+            });
         });
     }
-    
-    return(
+
+    return (
         <View>
             <Appbar.Header style={{ backgroundColor: 'white' }}>
                 <Appbar.BackAction onPress={() => goBack()} color="#448aff" />
-                <Appbar.Content title="Adicionar Feiras" color="#448aff" /> 
+                <Appbar.Content title="Adicionar Feiras" color="#448aff" />
             </Appbar.Header>
 
-            <View style={{ height: "auto", maxHeight: screenHeight}}>
-                
-                <ScrollView 
-                    contentContainerStyle={{ 
+            <View style={{ height: "auto", maxHeight: screenHeight }}>
+
+                <ScrollView
+                    contentContainerStyle={{
                         paddingHorizontal: 0,
                         paddingBottom: 78,
                     }}
                 >
                     <View style={styles.container}>
-                        <DropDownPicker
+                        {/* <DropDownPicker
                             open
-                            setOpen={() => {}}
-                            setValue={() => {}}
+                            setOpen={() => { }}
+                            setValue={() => { }}
                             value={[]}
                             style={{ height: 60 }}
                             placeholder="Feiras em que participa"
                             containerStyle={{ height: 50 }}
-                            items={items} 
+                            items={items}
                             setItems={(item) => setSelectedItems(item)}
                             multiple={true}
                             multipleText="Itens selecionados: %d"
                             searchable={true}
                             searchPlaceholder='Busque uma feira'
-                            searchPlaceholderTextColor='gray'                            
-                        />
+                            searchPlaceholderTextColor='gray'
+                        /> */}
 
-                        <Image style={styles.image} source={require('../../assets/impedir.png')}/> 
+                        <Image style={styles.image} source={require('../../../assets/impedir.png')} />
 
                         <Checkbox.Item
                             style={{ marginTop: 4 }}
                             label='Desejo cadastrar minha residência'
-                            labelStyle={{color: 'red'}}
+                            labelStyle={{ color: 'red' }}
                             color='#5c6bc0'
                             status={checked ? 'checked' : 'unchecked'}
-                            onPress={() => {setChecked(!checked);}}
+                            onPress={() => { setChecked(!checked); }}
                         />
 
                         <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                             <Text style={styles.buttonText}>Cadastrar</Text>
-                        </TouchableOpacity>     
+                        </TouchableOpacity>
                     </View>
 
                     <Contact>Precisa de uma feira não lisada?</Contact>

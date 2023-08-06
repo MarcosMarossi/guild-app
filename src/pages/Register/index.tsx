@@ -1,120 +1,121 @@
-import React, { useState } from 'react';
-import { View, Text, Alert, Image, Dimensions } from 'react-native'
-import { Appbar, TextInput } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import * as yup from 'yup';
-import { setLocale } from 'yup';
-
+import React from 'react';
+import { View, Dimensions } from 'react-native'
+import { Button, Paragraph, TextInput } from 'react-native-paper';
+import { ScrollView } from 'react-native-gesture-handler';
+import * as Yup from 'yup';
+import UserImage from '../../assets/user-group-296.svg';
 import styles from './style';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
-import { toastValidation } from '../../utils/toast-utils';
+import { Formik } from 'formik';
 
 function Register() {
-    const [name, setName] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [whatsapp, setWhatsapp] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
     const { changeRoute } = useNavigate();
-    
     const screenHeight = Dimensions.get('window').height;
 
-    setLocale({
-        mixed: {
-          required: 'O campo ${path} não deve estar em branco!',
-        },        
-        string: {
-            min: 'O campo de ${path} deve ser maior que ${min} caracteres',
-            max: 'O campo de ${path} deve ser menor que ${max} caracteres',
-            email: 'Por favor, digite um email válido!'
-        },
+    const SignupSchema = Yup.object().shape({
+        name: Yup.string()
+            .required('O campo de nome é requerido!')
+            .min(3, 'É necessário pelo menos 3 dígitos.'),
+        email: Yup.string()
+            .required('O campo de e-mail é requerido!')
+            .email('O campo informado não é um e-mail.')
+            .min(3, 'É necessário pelo menos 3 dígitos.'),
+        whatsapp: Yup.number()
+            .required('O campo de Whatsapp é requerido!')
+            .min(8, 'É necessário pelo menos 8 dígitos.'),
+        password: Yup.string()
+            .required('O campo de senha é requerido!')
+            .min(8, 'É necessário pelo menos 8 dígitos.'),
     });
 
-    const navigation = useNavigation();
-
-    function handleNavigationToMain() {
-        navigation.goBack();
-    }
-
-    const validSchema = yup.object().shape({
-        nome: yup.string().min(5).required(),
-        email: yup.string().min(8).email().required(),        
-        whatsapp: yup.string().min(11).max(11).required(),
-        senha: yup.string().min(8).required(),
-    });
-
-    function handleNavigationToProducts() {
-        validSchema.validate( { nome: name, email: email, whatsapp: whatsapp, senha: password }).then( () => {
-            changeRoute(SystemRoutes.StepProduct, { name, email, whatsapp, password })
-        }).catch(function (err: { errors: any[]; }) {           
-            err.errors.map((error: any) => {
-                toastValidation(`${error as string}.`);
-            });            
-        });
-    }
-    
     return (
-        <View>
-            <Appbar.Header style={{ backgroundColor: 'white' }}>
-                <Appbar.BackAction onPress={handleNavigationToMain} color="#448aff" />
-                <Appbar.Content title="Cadastro" color="#448aff" /> 
-            </Appbar.Header>
-            
-            <View style={{ height: "auto", maxHeight: screenHeight}}>                
-                <ScrollView 
-                    contentContainerStyle={{ 
-                        paddingHorizontal: 0,
-                        paddingBottom: 78,
-                    }}
-                >  
-                    <View style={styles.container}>  
-                        {/* <Image style={styles.image} source={logo}/>     
-                        <LogoImage /> */}
+        <Formik
+            initialValues={
+                {
+                    name: '',
+                    email: '',
+                    whatsapp: 0,
+                    password: ''
+                }
+            }
+            validationSchema={SignupSchema}
+            onSubmit={({ name, email, whatsapp, password }) => {
+                changeRoute(SystemRoutes.StepProduct, { name, email, whatsapp, password })
+            }}
+        >
+            {({ handleChange, handleSubmit, errors }) => (
+                <View>
+                    <View style={{ height: "auto", maxHeight: screenHeight }}>
+                        <ScrollView
+                            contentContainerStyle={{
+                                paddingHorizontal: 0,
+                                paddingBottom: 0,
+                            }}
+                        >
+                            <View style={[styles.container, { marginTop: 48 }]}>
+                                <UserImage style={{ alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 }} />
 
-                        <TextInput
-                            mode="outlined"
-                            style={[styles.input, {marginTop: 16}]}
-                            label="Nome completo"
-                            value={name}
-                            onChangeText={text => setName(text) }
-                        />
+                                <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>
 
-                        <TextInput
-                            keyboardType={"email-address"}
-                            mode="outlined"
-                            style={styles.input}
-                            label="E-mail"
-                            value={email}
-                            onChangeText={text => setEmail(text)}
-                        />
+                                <TextInput
+                                    mode="outlined"
+                                    style={[styles.input, { marginTop: 0 }]}
+                                    label="Nome completo"
+                                    onChangeText={handleChange('name')}
+                                />
 
-                        <TextInput
-                            keyboardType={"numeric"}
-                            mode="outlined"
-                            style={styles.input}
-                            label="Whatsapp"
-                            maxLength={11}
-                            value={whatsapp}
-                            onChangeText={text => setWhatsapp(text)}
-                        />
+                                {errors.name &&
+                                    <Paragraph style={{ color: 'red' }}>{errors.name}</Paragraph>
+                                }
 
-                        <TextInput
-                            mode="outlined"
-                            style={styles.input}                    
-                            label="Senha"
-                            secureTextEntry={true}
-                            value={password}
-                            onChangeText={text => setPassword(text)}
-                        />  
+                                <TextInput
+                                    keyboardType={"email-address"}
+                                    mode="outlined"
+                                    style={styles.input}
+                                    label="E-mail"
+                                    onChangeText={handleChange('email')}
+                                />
+                                
+                                {errors.email &&
+                                    <Paragraph style={{ color: 'red' }}>{errors.email}</Paragraph>
+                                }
 
-                        <TouchableOpacity onPress={handleNavigationToProducts} style={styles.button}>
-                            <Text style={styles.buttonText}>Registrar</Text>
-                        </TouchableOpacity> 
-                    </View>                
-                </ScrollView>
-            </View>
-        </View>
+                                <TextInput
+                                    keyboardType={"numeric"}
+                                    mode="outlined"
+                                    style={styles.input}
+                                    label="Whatsapp"
+                                    maxLength={11}
+                                    onChangeText={handleChange('whatsapp')}
+                                />
+
+                                {errors.whatsapp &&
+                                    <Paragraph style={{ color: 'red' }}>{errors.whatsapp}</Paragraph>
+                                }
+
+                                <TextInput
+                                    mode="outlined"
+                                    label="Senha"
+                                    style={styles.input}
+                                    secureTextEntry={true}
+                                    onChangeText={handleChange('password')}
+                                />
+
+                                {errors.password &&
+                                    <Paragraph style={{ color: 'red' }}>{errors.password}</Paragraph>
+                                }
+
+                                <Button style={{ marginTop: 32 }} icon="arrow-right-circle-outline" mode="contained" onPress={() => handleSubmit()}>
+                                    Próximo
+                                </Button>
+                            </View>
+                        </ScrollView>
+                    </View>
+                </View>
+            )}
+        </Formik>
+
     );
 }
 

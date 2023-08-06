@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Image, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ScrollView, View } from 'react-native';
 import { useRoute } from "@react-navigation/native";
-import { Text, Appbar } from 'react-native-paper';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { Appbar, Button } from 'react-native-paper';
+import MultiSelect from 'react-native-multiple-select';
 import * as yup from 'yup';
 
 import styles from './styles';
@@ -26,8 +26,8 @@ interface Item {
 }
 
 interface ListItem {
-  label: string,
-  value: string
+  id: string,
+  name: string
 }
 
 const StepProducts = () => {
@@ -37,8 +37,8 @@ const StepProducts = () => {
   const screenHeight = Dimensions.get('window').height;
   const route = useRoute();
   const routeParams = route.params as Params;
-  const { changeRoute, goBack } = useNavigate();
-  
+  const { changeRoute } = useNavigate();
+
   setLocale({
     mixed: {
       required: 'A lista de ${path} deve ser preenchida.',
@@ -53,18 +53,18 @@ const StepProducts = () => {
     api.get("/products").then((response) => {
       const { data } = response;
       setItems(data.map((item: Item): ListItem => ({
-        label: item.name + '', 
-        value: item.id + ''
-      })));        
+        name: item.name + '',
+        id: item.id + ''
+      })));
     });
   }, []);
 
   function handleNavigationToRegister() {
     changeRoute(SystemRoutes.Register);
-  } 
+  }
 
   function handleNavigationToFair() {
-    validSchema.validate({ produtos: selectedItems }).then( valid => {
+    validSchema.validate({ produtos: selectedItems }).then(valid => {
       changeRoute(SystemRoutes.StepFair, {
         idsProduct: selectedItems.map(value => ({
           idProduct: value,
@@ -77,52 +77,60 @@ const StepProducts = () => {
     }).catch(function (err) {
       err.errors.map((error: any) => {
         toastValidation(`${error as string}`);
-      });            
+      });
     });
   }
 
   return (
-    <View>            
+    <View>
       <Appbar.Header style={{ backgroundColor: 'white' }}>
-          <Appbar.BackAction onPress={handleNavigationToRegister} color="#448aff" />
-          <Appbar.Content title="Adicionar Produtos" color="#448aff" /> 
+        <Appbar.BackAction onPress={handleNavigationToRegister} color="#448aff" />
+        <Appbar.Content title="Adicionar Produtos" color="#448aff" />
       </Appbar.Header>
 
-      <View style={{ height: "auto", maxHeight: screenHeight}}>
-                
-        <ScrollView 
-          contentContainerStyle={{ 
+      <View style={{ height: "auto", maxHeight: screenHeight }}>
+        <View style={styles.container}>
+          <MultiSelect
+            hideSubmitButton={true}
+            uniqueKey="id"
+            displayKey="name"
+            items={items}
+            onSelectedItemsChange={(items: string[]) => setSelectedItems([...items])}
+            selectedItems={selectedItems}
+            selectText="Selecione seus produtos"
+            searchInputPlaceholderText="Busque os itens"
+            tagRemoveIconColor="#212121"
+            tagBorderColor="#212121"
+            textColor='#212121'
+            tagTextColor="#212121"
+            selectedItemTextColor="#212121"
+            selectedItemIconColor="#212121"
+            itemTextColor="#212121"
+            searchInputStyle={{ color: '#212121', height: 50 }}
+            submitButtonColor="#212121"
+            styleIndicator={{ height: 32, borderColor: 'grey' }}
+          />
+          
+          <ScrollView
+            contentContainerStyle={{
               paddingHorizontal: 0,
-              paddingBottom: 78,
-          }}
-        > 
-          <View style={styles.container}>
-            <DropDownPicker
-              open
-              setOpen={() => {}}
-              setValue={() => {}}
-              value={[]}
-              style={{ height: 60 }}
-              placeholder="Selecione seus produtos"
-              containerStyle={{ height: 50 }}              
-              items={items} 
-              multiple={true}
-              multipleText="Itens selecionados: %d"
-              setItems={item => setSelectedItems(item)}
-              searchable={true}
-              searchPlaceholder="Busque um produto"
-              searchPlaceholderTextColor="gray"
-            />   
-            <Image style={styles.image} source={require('../../assets/sacola.png')}/> 
-            
-            <TouchableOpacity onPress={handleNavigationToFair} style={styles.button}>
-              <Text style={styles.buttonText}>Cadastrar</Text>
-            </TouchableOpacity>  
-          </View> 
+              paddingBottom: 0,
+            }}
+          >
+            <Image style={styles.image} source={require('../../../assets/sacola.png')} />
 
-          <Contact>Precisa de algum produto não lisado?</Contact>   
-        </ScrollView>
-      </View>      
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <Button style={{ margin: 16 }} icon="arrow-left-circle-outline" mode="contained" onPress={handleNavigationToFair}>
+                Anterior
+              </Button>
+              <Button style={{ margin: 16 }} icon="arrow-right-circle-outline" mode="contained" onPress={() => changeRoute(SystemRoutes.Register)}>
+                Próximo
+              </Button>
+            </View>
+          </ScrollView>
+        </View>
+        <Contact>Precisa de algum produto não lisado?</Contact>
+      </View>
     </View>
   );
 }
