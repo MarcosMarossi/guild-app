@@ -6,6 +6,7 @@ import { useNavigate } from "../../../hooks/useNavigate";
 import { SystemRoutes } from "../../../ts/enums/routes";
 import { Point } from "../../../ts/interfaces/point-interfaces";
 import styles from "./style";
+import CampingSvg from '../../../assets/camping.svg';
 
 interface IProps {
   points: Point[];
@@ -59,18 +60,14 @@ const Points = ({ points }: IProps) => {
               {points.map((point) => (
                 <Marker
                   key={point.id}
-                  style={styles.mapMarker}
                   onPress={() => handleNavigateToDetail(point.id)}
                   coordinate={{
                     latitude: point.latitude,
                     longitude: point.longitude,
                   }}
                 >
-                  <View style={styles.mapMarkerContainer}>
-                    <Image
-                      style={styles.mapMarkerImage}
-                      source={require("../../../assets/impedir.png")}
-                    />
+                  <View >
+                  <CampingSvg width={32} height={32}/>
                   </View>
                 </Marker>
               ))}

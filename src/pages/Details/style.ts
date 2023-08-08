@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       margin: 8,
       padding: 16,
+      borderRadius: 8
     },
     image: {
       width: 50,

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   mapMarkerContainer: {
     width: 35,
     height: 35,
-    backgroundColor: '#448aff',
+    backgroundColor: '#c62828',
     flexDirection: "column",
     borderRadius: 8,
     overflow: "hidden",

@@ -1,19 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Linking } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, Linking, StyleProp } from 'react-native';
+import { Button } from 'react-native-paper';
 
-const Contact = (props: { children: React.ReactNode; }) => {
+interface IProps {
+    children: React.ReactNode;
+    style?: StyleProp<any>;
+}
+
+const Contact = (props: IProps) => {
     const handleLinkToWhatsapp = (  ) => {
         Linking.openURL(`whatsapp://send?phone=5519996127100`);
     }
 
     return(
-        <View style={styles.container}>
-            <Text style={styles.title}>{props.children}</Text>
-            <TouchableOpacity onPress={() => handleLinkToWhatsapp()} style={styles.button}>
-            <Image style={styles.buttonIcon} source={require('../../assets/whatsapp.png')}/>
-            <Text style={styles.buttonText}>Entrar em contato</Text>
-        </TouchableOpacity> 
+        <View style={[styles.container, props.style]}>
+            <Text style={styles.text}>{props.children}</Text>
+
+            <Button buttonColor='#4caf50' style={styles.button} icon="whatsapp" mode="contained" onPress={() => handleLinkToWhatsapp()}>
+                Entrar em contato
+            </Button>
         </View>
     )
 }
@@ -24,30 +29,15 @@ const styles = StyleSheet.create({
         marginLeft: 16,
         marginRight: 16,
         padding: 16,
+        borderRadius: 8
     },
-    title: {
-        fontSize: 17,
+    text: {
+        textAlign: 'center', 
+        marginBottom: 16
     },
-    button: {        
-        height: 50,
-        flexDirection: 'row',
-        alignItems: 'center',      
-        backgroundColor: '#66bb6a',
-        marginTop: 16,
-      },  
-      buttonIcon: {
-        height: 30,
-        width: 30,
-        marginLeft: 10
-      },  
-      buttonText: {
-        flex: 1,
-        justifyContent: 'center',
-        textAlign: 'center',
-        color: '#FFF',
-        fontSize: 17,
-        fontWeight: 'bold'
-      }
+    button: {
+        margin: 8
+    }
 });
 
 export default Contact;

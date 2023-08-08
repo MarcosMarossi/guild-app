@@ -8,10 +8,12 @@ import styles from './style';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import { Formik } from 'formik';
+import { useFarmerContext } from '../../store';
 
 function Register() {
     const { changeRoute } = useNavigate();
     const screenHeight = Dimensions.get('window').height;
+    const { setFair } = useFarmerContext();
 
     const SignupSchema = Yup.object().shape({
         name: Yup.string()
@@ -41,7 +43,8 @@ function Register() {
             }
             validationSchema={SignupSchema}
             onSubmit={({ name, email, whatsapp, password }) => {
-                changeRoute(SystemRoutes.StepProduct, { name, email, whatsapp, password })
+                changeRoute(SystemRoutes.StepProduct, { name, email, whatsapp, password });
+                setFair({ name, email, whatsapp, password });
             }}
         >
             {({ handleChange, handleSubmit, errors }) => (

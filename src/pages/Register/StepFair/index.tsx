@@ -2,10 +2,10 @@ import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Image, Text, ScrollView, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Appbar, Checkbox } from 'react-native-paper';
+import { Appbar, Button, Checkbox, Paragraph } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as yup from 'yup';
-
+import MultiSelect from 'react-native-multiple-select';
 import styles from './style';
 import Contact from '../../../components/Contacts';
 import { setLocale } from 'yup';
@@ -13,6 +13,8 @@ import { useNavigate } from '../../../hooks/useNavigate';
 import { SystemRoutes } from '../../../ts/enums/routes';
 import api from '../../../services';
 import { toastError, toastSuccess, toastValidation } from '../../../utils/toast-utils';
+import StoreSvg from '../../../assets/store.svg';
+import { useFarmerContext } from '../../../store';
 
 interface Item {
     id: number,
@@ -20,28 +22,18 @@ interface Item {
 }
 
 interface ListItem {
-    label: string,
-    value: string
-}
-
-interface Params {
-    name: string,
-    email: string,
-    whatsapp: string,
-    password: string,
-    idsProduct: any
+    id: string,
+    name: string
 }
 
 function StepFair() {
-    const [selectedItems, setSelectedItems] = useState<ListItem[]>([]);
+    const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [items, setItems] = useState<ListItem[]>([]);
     const [checked, setChecked] = useState<boolean>(false);
-
-    const screenHeight = Dimensions.get('window').height;
-    const route = useRoute();
-    const routeParams = route.params as Params;
-
-    const { changeRoute, goBack } = useNavigate();
+    const screenHeight: number = Dimensions.get('window').height;
+    const { fair, setFair } = useFarmerContext();
+    
+    const { changeRoute } = useNavigate();
 
     function handleNavigationToMain() {
         changeRoute(SystemRoutes.Main);
@@ -65,25 +57,29 @@ function StepFair() {
         api.get("/fairs").then((response) => {
             const { data } = response;
             setItems(data.map((item: Item): ListItem => ({
-                label: item.siteName + '',
-                value: item.id + ''
+                name: item.siteName + '',
+                id: item.id + ''
             })));
         });
     }, []);
 
+    function handleNavigationToProducts() {
+        changeRoute(SystemRoutes.StepProduct);
+    }
+
     async function handleSubmit() {
         validSchema.validate({ feiras: selectedItems }).then(valid => {
             api.post('/customers', {
-                name: routeParams.name.trim(),
-                email: routeParams.email.trim(),
-                whatsapp: routeParams.whatsapp.trim(),
-                customerPassword: routeParams.password.trim(),
-                idsProduct: routeParams.idsProduct,
+                name: fair.name.trim(),
+                email: fair.email.trim(),
+                whatsapp: fair.whatsapp,
+                customerPassword: fair.password.trim(),
+                idsProduct: fair.idsProduct,
                 idsFair: selectedItems.map(value => ({ idFair: value })),
-            }).then(response => {
+            }).then(() => {
                 api.post('/auth', {
-                    email: routeParams.email,
-                    customerPassword: routeParams.password,
+                    email: fair.email,
+                    customerPassword: fair.password,
                 }).then(async response => {
                     await AsyncStorage.setItem('@storage_Key', response.data.tipo + ' ' + response.data.token);
                     await AsyncStorage.setItem('@storage_Id', String(response.data.id));
@@ -97,7 +93,7 @@ function StepFair() {
 
                     handleNavigationToMain();
                 })
-            }).catch(error => {
+            }).catch(() => {
                 toastError('Falha ao registrar. Verifique novamente suas informações.');
             });
         }).catch(function (err) {
@@ -109,55 +105,60 @@ function StepFair() {
 
     return (
         <View>
-            <Appbar.Header style={{ backgroundColor: 'white' }}>
-                <Appbar.BackAction onPress={() => goBack()} color="#448aff" />
-                <Appbar.Content title="Adicionar Feiras" color="#448aff" />
-            </Appbar.Header>
-
             <View style={{ height: "auto", maxHeight: screenHeight }}>
+                <View style={[styles.container, { marginTop: 48 }]}>
+                    <StoreSvg style={{ alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 }}  />
+                    <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>
 
-                <ScrollView
-                    contentContainerStyle={{
-                        paddingHorizontal: 0,
-                        paddingBottom: 78,
-                    }}
-                >
-                    <View style={styles.container}>
-                        {/* <DropDownPicker
-                            open
-                            setOpen={() => { }}
-                            setValue={() => { }}
-                            value={[]}
-                            style={{ height: 60 }}
-                            placeholder="Feiras em que participa"
-                            containerStyle={{ height: 50 }}
-                            items={items}
-                            setItems={(item) => setSelectedItems(item)}
-                            multiple={true}
-                            multipleText="Itens selecionados: %d"
-                            searchable={true}
-                            searchPlaceholder='Busque uma feira'
-                            searchPlaceholderTextColor='gray'
-                        /> */}
+                    <MultiSelect
+                        hideSubmitButton={true}
+                        uniqueKey="id"
+                        displayKey="name"
+                        items={items}
+                        onSelectedItemsChange={(items: string[]) => setSelectedItems([...items])}
+                        selectedItems={selectedItems}
+                        selectText="Selecione suas feiras"
+                        searchInputPlaceholderText="Busque os itens"
+                        tagRemoveIconColor="#009688"
+                        tagBorderColor="#009688"
+                        textColor='#009688'
+                        tagTextColor="#009688"
+                        selectedItemTextColor="#009688"
+                        selectedItemIconColor="#009688"
+                        itemTextColor="#009688"
+                        styleListContainer={{ height: 128 }}
+                        searchInputStyle={{ color: '#009688', height: 50 }}
+                        submitButtonColor="#009688"
+                        styleIndicator={{ height: 32, borderColor: '#009688' }}
+                    />
 
-                        <Image style={styles.image} source={require('../../../assets/impedir.png')} />
-
+                    <ScrollView
+                        contentContainerStyle={{
+                            paddingHorizontal: 0,
+                            paddingBottom: 0,
+                        }}
+                    >
                         <Checkbox.Item
                             style={{ marginTop: 4 }}
-                            label='Desejo cadastrar minha residência'
-                            labelStyle={{ color: 'red' }}
+                            label='Cadastrar meu local'
                             color='#5c6bc0'
                             status={checked ? 'checked' : 'unchecked'}
                             onPress={() => { setChecked(!checked); }}
                         />
 
-                        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                            <Text style={styles.buttonText}>Cadastrar</Text>
-                        </TouchableOpacity>
-                    </View>
+                        <View style={{ display: 'flex', flexDirection: 'row' }}>
+                            <Button style={{ margin: 16 }} icon="arrow-left-circle-outline" mode="contained" onPress={handleNavigationToProducts}>
+                                Anterior
+                            </Button>
+                            <Button style={{ margin: 16 }} icon="check-decagram-outline" mode="contained" onPress={handleSubmit}>
+                                Finalizar
+                            </Button>
+                        </View>
 
-                    <Contact>Precisa de uma feira não lisada?</Contact>
-                </ScrollView>
+                        <Contact>Precisa de uma feira não lisada?</Contact>
+
+                    </ScrollView>
+                </View>
             </View>
         </View>
     );

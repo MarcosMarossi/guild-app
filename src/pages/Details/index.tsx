@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute } from "@react-navigation/native";
-import { ActivityIndicator, Appbar, Paragraph } from 'react-native-paper';
-import { Image, Linking, Text, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Appbar, Button, Paragraph } from 'react-native-paper';
+import { Linking } from 'react-native';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import StoreSvg from '../../assets/store.svg';
+import FarmerSvg from '../../assets/farmer.svg';
 import styles from './style';
 import { Data } from '../../ts/interfaces/fair-interfaces';
 import { User } from '../../ts/interfaces/user-interfaces';
 import api from '../../services';
-import { formatNumberUtil } from '../../utils/format-utils';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 
@@ -28,9 +28,7 @@ const Details = () => {
   useEffect(() => {
     api.get(`fairs/${routeParams.id}`).then(response => {
       setData(response.data);
-      setCustomers(response.data.users);
-
-      console.log(response.data.users);
+      setCustomers(response.data.customers);
     });
   }, []);
 
@@ -41,8 +39,8 @@ const Details = () => {
   return (
     <View >
       <Appbar.Header style={{ backgroundColor: '#fff' }}>
-        <Appbar.BackAction onPress={() => { changeRoute(SystemRoutes.Main) }} color="#448aff" />
-        <Appbar.Content title="Detalhes" color="#448aff" />
+        <Appbar.BackAction onPress={() => { changeRoute(SystemRoutes.Main) }} color="#c62828" />
+        <Appbar.Content title="Detalhes" color="#c62828" />
       </Appbar.Header>
 
       {data ?
@@ -53,25 +51,23 @@ const Details = () => {
           }}
         >
           <View style={styles.container}>
-            <Image style={styles.image} source={require('../../assets/impedir.png')} />
-            <Paragraph style={styles.title}>{data.siteName}</Paragraph>
+            <StoreSvg style={{ alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 }} />
+            <Paragraph style={styles.title}>Nome da feira: {data.siteName}</Paragraph>
             <Paragraph style={styles.description}>Descrição: {data.description}</Paragraph>
             <Paragraph style={styles.description}>Endereço: {data.address}, {data.city + ' - ' + data.uf}</Paragraph>
             <Paragraph style={styles.description}>Número de Feirantes: <Paragraph>{customers.length}</Paragraph></Paragraph>
           </View>
 
-          {customers.length !== 0 ? customers.map(customer => (
+          {customers && customers.length !== 0 ? customers.map(customer => (
             <View key={customer.email} style={styles.container}>
-              {/* <Image style={styles.image} source={cart} />   */}
-              <Paragraph>Feirante: {customer.name}</Paragraph>
-              <Paragraph style={{ fontSize: 14 }}>Produtos: {customer.listProduct}</Paragraph>
+              <FarmerSvg height={80} width={80} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 }} />
+              <Paragraph>Nome do Feirante: {customer.name}</Paragraph>
+              <Paragraph style={{ fontSize: 14 }}>Produtos anunciados: {customer.listProduct}</Paragraph>
               <Paragraph style={styles.description}>E-mail: {customer.email}</Paragraph>
-              <Paragraph style={styles.description}>Whatsapp: {formatNumberUtil(customer.whatsapp)}</Paragraph>
 
-              <TouchableOpacity onPress={() => handleLinkToWhatsapp(customer.whatsapp)} style={styles.button}>
-                {/* <Image style={styles.buttonIcon} source={whatsappIcon}/> */}
-                <Text style={styles.buttonText}>Entrar em contato</Text>
-              </TouchableOpacity>
+              <Button buttonColor='#4caf50' style={{ marginTop: 16 }} icon="whatsapp" mode="contained" onPress={() => handleLinkToWhatsapp(customer.whatsapp)}>
+                Entrar em contato
+              </Button>
             </View>
           ))
             :

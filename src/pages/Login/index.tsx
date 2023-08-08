@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View, Image, Alert, ScrollView, Dimensions } from 'react-native';
-import { TextInput, Text, Appbar } from 'react-native-paper';
+import { View, ScrollView, Dimensions } from 'react-native';
+import { TextInput, Text, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import styles from './style';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import api from '../../services';
 import { toastError } from '../../utils/toast-utils';
+import LogoSvg from '../../assets/grape.svg';
+import styles from './style';
 
-const Login = () => {
-    
+const Login = () => {    
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [token] = useState<string>('');
     const { changeRoute } = useNavigate();
     
-    const screenHeight = Dimensions.get('window').height;
+    const screenHeight: number = Dimensions.get('window').height;
     
     function handleNavigationToMain() {     
         changeRoute(SystemRoutes.Main, { token });
@@ -38,12 +37,7 @@ const Login = () => {
     }
 
     return (
-        <View>            
-            <Appbar.Header style={{ backgroundColor: 'white' }}>
-                <Appbar.BackAction onPress={handleNavigationToMain} color="#448aff" />
-                <Appbar.Content title="Entrar" color="#448aff" /> 
-            </Appbar.Header>
-
+        <View>
             <View style={{ height: "auto" , maxHeight: screenHeight }}>                
                 <ScrollView 
                     contentContainerStyle={{ 
@@ -51,9 +45,9 @@ const Login = () => {
                         paddingBottom: 78,
                     }}
                 >  
-                    <View style={styles.container}>
-                        {/* <Image style={styles.image} source={logo}/> */}
-                        
+                    <View style={[styles.container, { marginTop: 48 }]}>                        
+                        <LogoSvg height={136} width={136} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 }} />
+
                         <Text style={[styles.description, { justifyContent: 'center', textAlign: 'center'}]}>
                             Bem-vindo(a) novamente!
                             {"\n"}Faça a login com seu e-mail e senha para gerenciar suas feiras.
@@ -78,9 +72,9 @@ const Login = () => {
                             onChangeText={text => setPassword(text)}
                         />
 
-                        <TouchableOpacity onPress={authentication} style={styles.button}>
-                            <Text style={styles.buttonText}>Entrar</Text>
-                        </TouchableOpacity>           
+                        <Button style={{ marginTop: 32 }} icon="login" mode="contained" onPress={authentication}>
+                            Entrar
+                        </Button>        
                     </View>
                 </ScrollView>
             </View>
