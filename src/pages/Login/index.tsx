@@ -6,7 +6,7 @@ import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import api from '../../services';
 import { toastError } from '../../utils/toast-utils';
-import LogoSvg from '../../assets/grape.svg';
+import LogoSvg from '../../assets/sprout-spring.svg';
 import styles from './style';
 
 const Login = () => {    

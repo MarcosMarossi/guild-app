@@ -5,4 +5,6 @@ export interface Data {
     city: string;
     uf: string;
     dayWeek: string;
+    latitude: number;
+    longitude: number;
 }

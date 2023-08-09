@@ -18,6 +18,7 @@ const Main = () => {
   const [points, setPoints] = useState<Point[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { changeRoute } = useNavigate();
+  const[disableSearch, setDisableSearch] = useState<boolean>(false);
 
   const [routes] = useState<RouteNav[]>([
     { key: 'map', title: 'Localizações', focusedIcon: 'google-maps', unfocusedIcon: 'google-maps' },
@@ -48,8 +49,10 @@ const Main = () => {
   return (
     <>
       <View style={{ flex: 1 }}>
-        <Appbar.Header style={{ backgroundColor: '#fff' }}>
-          <Appbar.Content title="Farmer Market" color="#c62828" />
+        <Appbar.Header>
+          <Appbar.Content mode='small' title="Feira Guild" style={{ marginRight: 16 }} color="#c62828" />
+          <Appbar.Action icon="magnify" onPress={() => setDisableSearch(!disableSearch)} />
+          
           <Menu
             onDismiss={() => setVisible(false)}
             visible={visible}
@@ -94,15 +97,17 @@ const Main = () => {
           </Menu>
         </Appbar.Header>
 
-        <View style={{ backgroundColor: 'white' }}>
-          <Searchbar
-            placeholder="Busque a feira ou endereço"
-            style={{ marginLeft: 16, marginRight: 16, marginBottom: 8 }}
-            onChangeText={text => setSearchQuery(text)}
-            value={searchQuery}
-            onSubmitEditing={handleFairs}
-          />
-        </View>    
+        {disableSearch && (
+          <View style={{ backgroundColor: 'white' }}>
+            <Searchbar
+              placeholder="Busque a feira ou endereço"
+              style={{ marginLeft: 16, marginRight: 16, marginBottom: 8 }}
+              onChangeText={text => setSearchQuery(text)}
+              value={searchQuery}
+              onSubmitEditing={handleFairs}
+            />
+          </View>   
+        )}         
         
         <BottomNavigation
           navigationState={{ index, routes }}

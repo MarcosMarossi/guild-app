@@ -6,7 +6,7 @@ import { useNavigate } from "../../../hooks/useNavigate";
 import { SystemRoutes } from "../../../ts/enums/routes";
 import { Point } from "../../../ts/interfaces/point-interfaces";
 import styles from "./style";
-import CampingSvg from '../../../assets/camping.svg';
+import CampingSvg from '../../../assets/market.svg';
 
 interface IProps {
   points: Point[];
