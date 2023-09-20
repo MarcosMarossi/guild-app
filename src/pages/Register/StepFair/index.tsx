@@ -1,8 +1,6 @@
-import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Image, Text, ScrollView, Dimensions } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Appbar, Button, Checkbox, Paragraph } from 'react-native-paper';
+import { View, ScrollView, Dimensions } from 'react-native';
+import { Button, Checkbox, Paragraph } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as yup from 'yup';
 import MultiSelect from 'react-native-multiple-select';
@@ -13,8 +11,8 @@ import { useNavigate } from '../../../hooks/useNavigate';
 import { SystemRoutes } from '../../../ts/enums/routes';
 import api from '../../../services';
 import { toastError, toastSuccess, toastValidation } from '../../../utils/toast-utils';
-import StoreSvg from '../../../assets/store.svg';
 import { useFarmerContext } from '../../../store';
+import FairSVG from '../../../assets/fair.svg';
 
 interface Item {
     id: number,
@@ -31,7 +29,7 @@ function StepFair() {
     const [items, setItems] = useState<ListItem[]>([]);
     const [checked, setChecked] = useState<boolean>(false);
     const screenHeight: number = Dimensions.get('window').height;
-    const { fair, setFair } = useFarmerContext();
+    const { fair } = useFarmerContext();
     
     const { changeRoute } = useNavigate();
 
@@ -81,7 +79,7 @@ function StepFair() {
                     email: fair.email,
                     customerPassword: fair.password,
                 }).then(async response => {
-                    await AsyncStorage.setItem('@storage_Key', response.data.tipo + ' ' + response.data.token);
+                    await AsyncStorage.setItem('@storage_Key', response.data.type + ' ' + response.data.token);
                     await AsyncStorage.setItem('@storage_Id', String(response.data.id));
 
                     toastSuccess('Cadastro realizado com sucesso');
@@ -107,8 +105,9 @@ function StepFair() {
         <View>
             <View style={{ height: "auto", maxHeight: screenHeight }}>
                 <View style={[styles.container, { marginTop: 48 }]}>
-                    <StoreSvg style={{ alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 }}  />
-                    <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>
+                    <FairSVG width={148} height={148} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }}  />
+                    
+                    <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de feira livre!</Paragraph>
 
                     <MultiSelect
                         hideSubmitButton={true}

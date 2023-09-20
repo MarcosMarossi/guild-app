@@ -4,44 +4,39 @@ const styles = StyleSheet.create({
     container: {
       backgroundColor: '#fff',
       margin: 8,
-      padding: 16,
-      borderRadius: 24
+      padding: 24,
+      borderRadius: 8
     },
     image: {
       width: 50,
       height: 50,
-      justifyContent: "center",
-      alignSelf: "center",
-      marginBottom: 8
+      alignSelf: "center"
     },
     title: {
-      fontSize: 14, 
-      fontWeight: 'bold'
+      fontSize: 14,
+      fontWeight: 'bold',
+      justifyContent: 'center', 
+      textAlign: 'center'
     },
     description: {
       fontSize: 14,
-      justifyContent: "center",
+      justifyContent: 'center',
       textAlign: 'justify'
     },
     button: {        
       height: 50,
       flexDirection: 'row',
+      overflow: 'hidden',
       alignItems: 'center',      
-      backgroundColor: '#66bb6a',
-      marginTop: 16,
-    },  
-    buttonIcon: {
-      height: 30,
-      width: 30,
-      marginLeft: 10
-    },  
+      backgroundColor: '#ff5722',
+      marginTop: 8
+    },   
     buttonText: {
       flex: 1,
       justifyContent: 'center',
       textAlign: 'center',
       color: '#FFF',
-      fontSize: 17,
-      fontWeight: 'bold'
+      fontSize: 16,
     }
   });
   

@@ -33,15 +33,17 @@ const Main = () => {
   }
 
   async function handleFairs(): Promise<void> {
-    await api.get<Point[]>(`/fairs?local=${searchQuery}`).then((response: AxiosResponse<Point[]>) => {
+    console.log('searchQuery', searchQuery);
+    await api.get<Point[]>(`/fairs/search?parameter=${searchQuery}`).then((response: AxiosResponse<Point[]>) => {
+
       setPoints(response.data);
     });
   }
 
   useEffect(() => {
-    if(!searchQuery || searchQuery !== '') {
-      api.get("/fairs").then(async (response: AxiosResponse<Point[]>) => {
-        setPoints(await response.data);
+    if(!searchQuery) {
+      api.get("/fairs").then((response: AxiosResponse<Point[]>) => {
+        setPoints(response.data);
       });
     }    
   }, [token]);

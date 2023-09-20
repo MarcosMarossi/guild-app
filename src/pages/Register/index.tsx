@@ -3,12 +3,12 @@ import { View, Dimensions } from 'react-native'
 import { Button, Paragraph, TextInput } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as Yup from 'yup';
-import UserImage from '../../assets/user-group-296.svg';
 import styles from './style';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import { Formik } from 'formik';
 import { useFarmerContext } from '../../store';
+import UserSVG from '../../assets/user.svg';
 
 function Register() {
     const { changeRoute } = useNavigate();
@@ -57,9 +57,9 @@ function Register() {
                             }}
                         >
                             <View style={[styles.container, { marginTop: 48 }]}>
-                                <UserImage style={{ alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 }} />
+                                <UserSVG width={128} height={128} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
 
-                                <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>
+                                <Paragraph style={{ marginBottom: 8, marginTop: 8, textAlign: 'justify' }}>Olá feirante, precisamos que preencha as informações do seu usuário para seguirmos com seu cadastro!</Paragraph>
 
                                 <TextInput
                                     mode="outlined"

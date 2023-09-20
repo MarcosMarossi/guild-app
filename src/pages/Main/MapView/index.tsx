@@ -6,7 +6,8 @@ import { useNavigate } from "../../../hooks/useNavigate";
 import { SystemRoutes } from "../../../ts/enums/routes";
 import { Point } from "../../../ts/interfaces/point-interfaces";
 import styles from "./style";
-import CampingSvg from '../../../assets/market.svg';
+import PointSVG from '../../../assets/points.svg';
+
 
 interface IProps {
   points: Point[];
@@ -67,7 +68,7 @@ const Points = ({ points }: IProps) => {
                   }}
                 >
                   <View >
-                  <CampingSvg width={32} height={32}/>
+                    <PointSVG width={35} height={35}/>
                   </View>
                 </Marker>
               ))}

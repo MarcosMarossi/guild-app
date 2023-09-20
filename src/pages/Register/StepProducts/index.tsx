@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
 import { Button, Paragraph } from 'react-native-paper';
 import MultiSelect from 'react-native-multiple-select';
-import MarketSvg from '../../../assets/shopping-cart.svg';
 import styles from './styles';
 import Contact from '../../../components/Contacts';
 import api from '../../../services';
 import { useNavigate } from '../../../hooks/useNavigate';
 import { SystemRoutes } from '../../../ts/enums/routes';
 import { useFarmerContext } from '../../../store';
+import ProductsSVG from '../../../assets/products.svg';
 
 interface Product {
   id: number,
@@ -54,7 +54,8 @@ const StepProducts = () => {
     <View>
       <View style={{ height: "auto", maxHeight: screenHeight }}>
         <View style={[styles.container, { marginTop: 48 }]}>
-          <MarketSvg style={{ alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 }} />
+          <ProductsSVG width={128} height={128} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
+
           <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>
           <MultiSelect
             hideSubmitButton={true}

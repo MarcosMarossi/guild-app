@@ -6,7 +6,7 @@ import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import api from '../../services';
 import { toastError } from '../../utils/toast-utils';
-import LogoSvg from '../../assets/sprout-spring.svg';
+import LogoSVG from '../../assets/logo.svg';
 import styles from './style';
 
 const Login = () => {    
@@ -26,12 +26,12 @@ const Login = () => {
             email: email.trim(),
             customerPassword: password.trim()
         }).then(async response => {
-            const responseBody = response.data.tipo + ' ' + response.data.token;  
+            const responseBody = response.data.type + ' ' + response.data.token;  
             const id = response.data.id + '';      
             await AsyncStorage.setItem('@storage_Id', id);         
             await AsyncStorage.setItem('@storage_Key', responseBody);
             handleNavigationToMain();
-        }). catch(error => {
+        }). catch(() => {
             toastError('Credenciais inválidas. Por favor, digite um e-mail e senha válidos.')
         });
     }
@@ -46,7 +46,7 @@ const Login = () => {
                     }}
                 >  
                     <View style={[styles.container, { marginTop: 48 }]}>                        
-                        <LogoSvg height={136} width={136} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 }} />
+                        <LogoSVG width={100} height={100} style={ { alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 } } />
 
                         <Text style={[styles.description, { justifyContent: 'center', textAlign: 'center'}]}>
                             Bem-vindo(a) novamente!

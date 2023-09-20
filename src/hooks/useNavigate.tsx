@@ -4,7 +4,10 @@ import { StackActions } from '@react-navigation/native';
 export function useNavigate() {
   const navigation = useNavigation();
 
-  function changeRoute(route: string, params?: object) {
+  /**
+   * 
+  */
+  function changeRoute(route: string, params?: object): void {
     navigation.navigate(route as never, params as never);
   }
 

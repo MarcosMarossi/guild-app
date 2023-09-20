@@ -9,6 +9,10 @@ import Login from "./pages/Login";
 import Details from "./pages/Details";
 import StepFair from "./pages/Register/StepFair";
 import StepProducts from "./pages/Register/StepProducts";
+import Locality from "./pages/Register/Locality";
+import NewFair from "./pages/NewFair";
+import Fairs from "./pages/Fairs";
+import Profile from "./pages/Profile";
 
 const Routes = () => {
   const AppStack = createStackNavigator();
@@ -22,6 +26,10 @@ const Routes = () => {
         <AppStack.Screen name={SystemRoutes.Details} component={Details} options={{ headerShown: false }} />
         <AppStack.Screen name={SystemRoutes.StepFair} component={StepFair} options={{ headerShown: false }} />
         <AppStack.Screen name={SystemRoutes.StepProduct} component={StepProducts} options={{ headerShown: false }} />
+        <AppStack.Screen name={SystemRoutes.Locality} component={Locality} options={{ headerShown: false }} />
+        <AppStack.Screen name={SystemRoutes.NewFair} component={NewFair} options={{ headerShown: false }} />
+        <AppStack.Screen name={SystemRoutes.Profile} component={Profile} options={{ headerShown: false }} />
+        <AppStack.Screen name={SystemRoutes.MyFair} component={Fairs} options={{ headerShown: false }} />
       </AppStack.Navigator>
     </NavigationContainer>
   );
