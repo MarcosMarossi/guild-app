@@ -56,7 +56,7 @@ function Register() {
                                 paddingBottom: 0,
                             }}
                         >
-                            <View style={[styles.container, { marginTop: 48 }]}>
+                            <View style={[styles.container, { marginTop: 32 }]}>
                                 <UserSVG width={128} height={128} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
 
                                 <Paragraph style={{ marginBottom: 8, marginTop: 8, textAlign: 'justify' }}>Olá feirante, precisamos que preencha as informações do seu usuário para seguirmos com seu cadastro!</Paragraph>

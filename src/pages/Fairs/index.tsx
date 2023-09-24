@@ -1,101 +1,125 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Image } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { Appbar, Button, Paragraph, Title } from 'react-native-paper';
+import { View, Dimensions } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as yup from 'yup';
 import styles from './style';
-import { toastError, toastSuccess } from '../../utils/toast-utils';
+import Contact from '../../components/Contacts';
+import { toastError, toastValidation, toastSuccess } from '../../utils/toast-utils';
+import { setLocale } from 'yup';
 import api from '../../services';
-import { Point } from '../../ts/interfaces/point-interfaces';
-import { User } from '../../ts/interfaces/user-interfaces';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
+import MultiSelect from 'react-native-multiple-select';
+import { Button, Paragraph } from 'react-native-paper';
 import FairSVG from '../../assets/fair.svg';
 
-function Profile() {
-    const [id, setId] = useState<number>();
-    const [fairs, setFairs] = useState<Point[]>();
-    const [customer, setCustomer] = useState<User>();
-    const [state, setState] = useState<boolean>(false);
-    const { changeRoute } = useNavigate();
+interface Item {
+    id: number,
+    siteName: string
+}
 
-    const navigation = useNavigation();
+interface ListItem {
+    id: string,
+    name: string
+}
+
+function Fairs() {
+    const [selectedItems, setSelectedItems] = useState<string[]>([]);
+    const [items, setItems] = useState<ListItem[]>([]);
+    const { changeRoute } = useNavigate();
+    const screenHeight = Dimensions.get('window').height;
+
+    const validSchema = yup.object().shape({
+        feiras: yup.array().of(yup.number()).required()
+    });
+
+    setLocale({
+        mixed: {
+            required: 'Você precisa preencher a lista de ${path}',
+        }
+    });
 
     useEffect(() => {
-        getCustumerId();
-        if (typeof id !== 'undefined') {
-            api.get(`/customers/${id}`).then(response => {
-                setFairs(response.data.fairs)
-                setCustomer(response.data)
-                setState(false);
-            });
-        }
-    }, [id, state]);
+        api.get('/fairs').then((response) => {
+            const { data } = response;
+            setItems(data.map((item: Item): ListItem => ({
+                name: item.siteName + '',
+                id: item.id + ''
+            })));
 
-    async function handleExcludeFair(fairId: number) {
-        api.delete('/customers', {
-            params: {
-                fairId,
-                customerId: id
-            },
-            headers: {
-                'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
-            },
-        }).then(response => {
-            setState(true);
-            toastSuccess('Desvinculado com sucesso');
-        }).catch(async err => {
-            await AsyncStorage.setItem('@storage_Key', 'invalid');
-            changeRoute(SystemRoutes.Main);
-            toastError('Por favor, faça o login novamente! Suas credenciais podem ser inválidas.');
+            setSelectedItems(data.map((item: Item) => item.id + ''));
         });
-    }
+    }, []);
 
-    async function getCustumerId() {
-        setId(Number(await AsyncStorage.getItem('@storage_Id')));
+    async function handleSubmit() {
+        validSchema.validate({ feiras: selectedItems }).then(async () => {
+
+            api.post('/customers/newfair', {
+                customerId: Number(await AsyncStorage.getItem('@storage_Id')),
+                idsFair: selectedItems.map(value => ({
+                    idFair: value,
+                }))
+            },
+                {
+                    headers: {
+                        'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
+                    }
+                }).then(() => {
+                    toastSuccess('Cadastro realizado com sucesso!');
+                    changeRoute(SystemRoutes.Main);
+                }).catch(() => {
+                    toastError('Falha ao registrar a nova feira');
+                })
+        }).catch(function (err) {
+            err.errors.map((error: any) => {
+                toastValidation(`${error as string}.`);
+            });
+        });
     }
 
     return (
         <View>
-            <Appbar.Header style={{ backgroundColor: 'white' }}>
-                <Appbar.BackAction onPress={() => { navigation.goBack() }} color="#c62828" />
-                <Appbar.Content title="Minhas Feiras" color="#c62828" />
-            </Appbar.Header>
+            <View style={{ height: "auto", maxHeight: screenHeight }}>
+                <View style={[styles.container, { marginTop: 32 }]}>
 
-            <ScrollView
-                contentContainerStyle={{
-                    paddingHorizontal: 8,
-                    paddingBottom: 100,
-                    marginBottom: 0
-                }}>
-                <View style={styles.container}>
-                    <Paragraph style={[styles.description, { justifyContent: 'center', textAlign: 'justify' }]}>Olá, {customer?.name}. Nesta seção você pode remover feiras que não participa mais.</Paragraph>
+                    <Button style={{ width: 118, backgroundColor: '#c62828' }} icon="keyboard-backspace" mode="contained" onPress={() => changeRoute(SystemRoutes.Main)}>
+                        Voltar
+                    </Button>
+
+                    <FairSVG width={148} height={148} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
+                    <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>
+
+                    <MultiSelect
+                        hideSubmitButton={true}
+                        uniqueKey="id"
+                        displayKey="name"
+                        items={items}
+                        onSelectedItemsChange={(items: string[]) => setSelectedItems([...items])}
+                        selectedItems={selectedItems}
+                        selectText="Selecione suas feiras"
+                        searchInputPlaceholderText="Busque os itens"
+                        tagRemoveIconColor="#5e35b1"
+                        tagBorderColor="#5e35b1"
+                        textColor='#424242'
+                        tagTextColor="#5e35b1"
+                        selectedItemTextColor="#5e35b1"
+                        selectedItemIconColor="#5e35b1"
+                        itemTextColor="#5e35b1"
+                        styleListContainer={{ height: 128 }}
+                        searchInputStyle={{ color: '#5e35b1', height: 50 }}
+                        submitButtonColor="#5e35b1"
+                        styleIndicator={{ height: 32, borderColor: '#5e35b1' }}
+                    />
+
+                    <Button style={{ marginTop: 16 }} icon="update" mode="contained" onPress={handleSubmit}>
+                        Atualizar
+                    </Button>
                 </View>
-
-                {fairs?.length !== 0 ?
-
-                    fairs?.map(fair => (
-                        <View key={fair.id} style={styles.container}>
-                            <FairSVG width={128} height={128} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
-
-                            <Paragraph>Nome: {fair.siteName}</Paragraph>
-                            <Paragraph style={styles.description}>Descrição: {fair.description}</Paragraph>
-                            <Paragraph style={styles.description}>Endereço: {fair.address}, {fair.city + ' - ' + fair.uf}</Paragraph>
-                            <Paragraph style={styles.description}>Aberto em: {fair.dayWeek}</Paragraph>
-
-                            <Button icon="store-remove" style={{ marginTop: 16 }} mode="outlined" onPress={() => handleExcludeFair(fair.id)}>Desvincular</Button>
-                        </View>
-                    ))
-                    :
-                    <View style={styles.container}>
-                        <Paragraph>Você não está associado a uma feira</Paragraph>
-                        <Paragraph>Basta selecionar a opção 'Menu' e depois 'Nova Feira' para vincular-se a uma.</Paragraph>
-                    </View>
-                }
-            </ScrollView>
+                
+                <Contact>Não precisa cadastrar seu ponto de vendas e quer uma feira não listada? Envie-nos uma mensagem!</Contact>
+            </View>
         </View>
     );
 }
 
-export default Profile;
+export default Fairs;

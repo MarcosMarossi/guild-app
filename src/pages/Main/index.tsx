@@ -67,16 +67,12 @@ const Main = () => {
             }>
             {token !== 'invalid' ?
               <>
-                <Menu.Item title="Nova Feira" onPress={() => {
-                  changeRoute(SystemRoutes.NewFair);
+                <Menu.Item title="Minhas Feiras" onPress={() => {
+                  changeRoute(SystemRoutes.MyFair);
                   setVisible(false);
                 }} />
                 <Menu.Item title="Meu Perfil" onPress={() => {
                   changeRoute(SystemRoutes.Profile);
-                  setVisible(false);
-                }} />
-                <Menu.Item title="Minhas Feiras" onPress={() => {
-                  changeRoute(SystemRoutes.MyFair);
                   setVisible(false);
                 }} />
                 <Menu.Item title="Sair" onPress={async () => {

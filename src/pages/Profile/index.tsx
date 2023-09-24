@@ -64,11 +64,6 @@ function Profile() {
 
     return (
         <View>
-            <Appbar.Header style={{ backgroundColor: 'white' }}>
-                <Appbar.BackAction onPress={() => navigation.goBack()} color="#c62828" />
-                <Appbar.Content title="Meu Perfil" color="#c62828" />
-            </Appbar.Header>
-
             {typeof products !== 'undefined' ?
 
                 <ScrollView
@@ -76,8 +71,12 @@ function Profile() {
                         paddingHorizontal: 8,
                         paddingBottom: 100,
                     }}>
-                    <View style={styles.container}>
-                        <Paragraph style={{ fontWeight: 'bold' }}>Meus Dados</Paragraph>
+                    <View style={[styles.container, { marginTop: 32 }]}>
+                        <Button style={{ width: 118, backgroundColor: '#c62828' }} icon="keyboard-backspace" mode="contained" onPress={() => changeRoute(SystemRoutes.Main)}>
+                            Voltar
+                        </Button>
+                        
+                        <Paragraph style={{ marginTop: 16 }}>Olá {customer.name}, nesta página você pode alterar suas informações!</Paragraph>
 
                         <UserSVG width={128} height={128} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
 

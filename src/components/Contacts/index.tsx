@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
         marginLeft: 16,
         marginRight: 16,
         padding: 16,
-        borderRadius: 8
+        borderRadius: 24,
+        margin: 8
     },
     text: {
         textAlign: 'center', 

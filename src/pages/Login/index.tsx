@@ -45,7 +45,7 @@ const Login = () => {
                         paddingBottom: 78,
                     }}
                 >  
-                    <View style={[styles.container, { marginTop: 48 }]}>                        
+                    <View style={[styles.container, { marginTop: 32 }]}>                        
                         <LogoSVG width={100} height={100} style={ { alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 } } />
 
                         <Text style={[styles.description, { justifyContent: 'center', textAlign: 'center'}]}>

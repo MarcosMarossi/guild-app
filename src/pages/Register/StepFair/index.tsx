@@ -61,12 +61,12 @@ function StepFair() {
         });
     }, []);
 
-    function handleNavigationToProducts() {
+    function handleNavigationToProducts(): void {
         changeRoute(SystemRoutes.StepProduct);
     }
 
-    async function handleSubmit() {
-        validSchema.validate({ feiras: selectedItems }).then(valid => {
+    async function handleSubmit(): Promise<void> {
+        validSchema.validate({ feiras: selectedItems }).then(() => {
             api.post('/customers', {
                 name: fair.name.trim(),
                 email: fair.email.trim(),
@@ -104,7 +104,7 @@ function StepFair() {
     return (
         <View>
             <View style={{ height: "auto", maxHeight: screenHeight }}>
-                <View style={[styles.container, { marginTop: 48 }]}>
+                <View style={[styles.container, { marginTop: 32 }]}>
                     <FairSVG width={148} height={148} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }}  />
                     
                     <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de feira livre!</Paragraph>
@@ -118,17 +118,17 @@ function StepFair() {
                         selectedItems={selectedItems}
                         selectText="Selecione suas feiras"
                         searchInputPlaceholderText="Busque os itens"
-                        tagRemoveIconColor="#009688"
-                        tagBorderColor="#009688"
-                        textColor='#009688'
-                        tagTextColor="#009688"
-                        selectedItemTextColor="#009688"
-                        selectedItemIconColor="#009688"
-                        itemTextColor="#009688"
+                        tagRemoveIconColor="#5e35b1"
+                        tagBorderColor="#5e35b1"
+                        textColor='#424242'
+                        tagTextColor="#5e35b1"
+                        selectedItemTextColor="#5e35b1"
+                        selectedItemIconColor="#5e35b1"
+                        itemTextColor="#5e35b1"
                         styleListContainer={{ height: 128 }}
-                        searchInputStyle={{ color: '#009688', height: 50 }}
-                        submitButtonColor="#009688"
-                        styleIndicator={{ height: 32, borderColor: '#009688' }}
+                        searchInputStyle={{ color: '#5e35b1', height: 50 }}
+                        submitButtonColor="#5e35b1"
+                        styleIndicator={{ height: 32, borderColor: '#5e35b1' }}
                     />
 
                     <ScrollView
@@ -154,8 +154,7 @@ function StepFair() {
                             </Button>
                         </View>
 
-                        <Contact>Precisa de uma feira não lisada?</Contact>
-
+                        <Contact>Não precisa cadastrar seu ponto de vendas e quer uma feira não listada? Envie-nos uma mensagem!</Contact>
                     </ScrollView>
                 </View>
             </View>

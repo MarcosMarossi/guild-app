@@ -8,7 +8,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   card: {
-    margin: 16
+    margin: 16,
+    borderRadius: 24
   },
   notfound: {
     padding: 16,

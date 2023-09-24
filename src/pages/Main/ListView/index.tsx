@@ -44,7 +44,7 @@ function List({ points }: IProps) {
                 </ScrollView>
                 :
                 <View>
-                    <Paragraph>adfad</Paragraph>
+                    <Paragraph>Nenhuma feira encontrada!</Paragraph>
                 </View>
             }
         </View>

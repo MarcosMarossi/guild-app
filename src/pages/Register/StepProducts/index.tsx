@@ -53,7 +53,7 @@ const StepProducts = () => {
   return (
     <View>
       <View style={{ height: "auto", maxHeight: screenHeight }}>
-        <View style={[styles.container, { marginTop: 48 }]}>
+        <View style={[styles.container, { marginTop: 32 }]}>
           <ProductsSVG width={128} height={128} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
 
           <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>
@@ -66,17 +66,17 @@ const StepProducts = () => {
             selectedItems={selectedItems}
             selectText="Selecione seus produtos"
             searchInputPlaceholderText="Busque os itens"
-            tagRemoveIconColor="#009688"
-            tagBorderColor="#009688"
-            textColor='#009688'
-            tagTextColor="#009688"
-            selectedItemTextColor="#009688"
-            selectedItemIconColor="#009688"
-            itemTextColor="#009688"
+            tagRemoveIconColor="#5e35b1"
+            tagBorderColor="#5e35b1"
+            textColor='#424242'
+            tagTextColor="#5e35b1"
+            selectedItemTextColor="#5e35b1"
+            selectedItemIconColor="#5e35b1"
+            itemTextColor="#5e35b1"
             styleListContainer={{ height: 128 }}
-            searchInputStyle={{ color: '#009688', height: 50 }}
-            submitButtonColor="#009688"
-            styleIndicator={{ height: 32, borderColor: '#009688' }}
+            searchInputStyle={{ color: '#5e35b1', height: 50 }}
+            submitButtonColor="#5e35b1"
+            styleIndicator={{ height: 32, borderColor: '#5e35b1' }}
           />
           <ScrollView
             contentContainerStyle={{
@@ -92,7 +92,7 @@ const StepProducts = () => {
                 Próximo
               </Button>
             </View>
-            <Contact>Precisa de algum produto não listado?</Contact>
+            <Contact>Precisa de algum produto não listado? Envie-nos uma mensagem!</Contact>
           </ScrollView>
         </View>
       </View>

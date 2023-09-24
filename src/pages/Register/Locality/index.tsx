@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, Alert, ScrollView, Dimensions } from 'react-native'
-import { useNavigation } from "@react-navigation/native";
+import { View, Text, ScrollView, Dimensions } from 'react-native';
 import { Appbar, TextInput } from 'react-native-paper';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
@@ -20,7 +19,6 @@ function Fair() {
     const [uf, setUf] = useState<string>('');
     const screenHeight = Dimensions.get('window').height;
     const { changeRoute } = useNavigate();
-    const navigation = useNavigation();
 
     setLocale({
         mixed: {
