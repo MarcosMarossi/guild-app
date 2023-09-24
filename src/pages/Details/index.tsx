@@ -5,8 +5,8 @@ import { Linking, Platform } from 'react-native';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import styles from './style';
-import { Data } from '../../ts/interfaces/fair-interfaces';
-import { User } from '../../ts/interfaces/user-interfaces';
+import { DetailTO, FairTO } from '../../ts/interfaces/fair-interfaces';
+import { CustomerTO } from '../../ts/interfaces/user-interfaces';
 import api from '../../services';
 import FairSVG from '../../assets/fair.svg';
 import ProductsSVG from '../../assets/products.svg';
@@ -17,15 +17,15 @@ interface Params {
 }
 
 const Details = () => {
-  const [data, setData] = useState<Data>({} as Data);
-  const [customers, setCustomers] = useState<User[]>([]);
+  const [data, setData] = useState<FairTO>({} as FairTO);
+  const [customers, setCustomers] = useState<CustomerTO[]>([]);
   const [assessments, setAssessments] = useState<boolean>(false);
   const [complaints, setComplaints] = useState<boolean>(false);
   const route = useRoute();
   const routeParams = route.params as Params;
 
   useEffect(() => {
-    api.get(`fairs/${routeParams.id}`).then(response => {
+    api.get<DetailTO>(`fairs/${routeParams.id}`).then((response) => {
       setData(response.data);
       setCustomers(response.data.customers);
     });

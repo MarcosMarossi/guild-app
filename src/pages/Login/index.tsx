@@ -8,6 +8,7 @@ import api from '../../services';
 import { toastError } from '../../utils/toast-utils';
 import LogoSVG from '../../assets/logo.svg';
 import styles from './style';
+import { LoginResponseTO } from '../../ts/interfaces/user-interfaces';
 
 const Login = () => {    
     const [email, setEmail] = useState<string>('');
@@ -17,12 +18,12 @@ const Login = () => {
     
     const screenHeight: number = Dimensions.get('window').height;
     
-    function handleNavigationToMain() {     
+    function handleNavigationToMain(): void {     
         changeRoute(SystemRoutes.Main, { token });
     }
 
-    async function authentication() {        
-        api.post('/auth', {
+    async function authentication(): Promise<void> {        
+        api.post<LoginResponseTO>('/auth', {
             email: email.trim(),
             customerPassword: password.trim()
         }).then(async response => {
@@ -46,9 +47,9 @@ const Login = () => {
                     }}
                 >  
                     <View style={[styles.container, { marginTop: 32 }]}>                        
-                        <LogoSVG width={100} height={100} style={ { alignSelf: 'center', justifyContent: 'center', margin: 4, width: 16, height: 16 } } />
+                        <LogoSVG width={100} height={100} style={styles.image} />
 
-                        <Text style={[styles.description, { justifyContent: 'center', textAlign: 'center'}]}>
+                        <Text style={styles.description}>
                             Bem-vindo(a) novamente!
                             {"\n"}Faça a login com seu e-mail e senha para gerenciar suas feiras.
                         </Text>

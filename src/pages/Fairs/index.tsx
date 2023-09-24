@@ -9,25 +9,18 @@ import { setLocale } from 'yup';
 import api from '../../services';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
-import MultiSelect from 'react-native-multiple-select';
 import { Button, Paragraph } from 'react-native-paper';
 import FairSVG from '../../assets/fair.svg';
-
-interface Item {
-    id: number,
-    siteName: string
-}
-
-interface ListItem {
-    id: string,
-    name: string
-}
+import SelectBox from '../../components/SelectBox';
+import { ListItem } from '../../ts/interfaces/items-interfaces';
+import BackButton from '../../components/BackButton';
+import { FairTO } from '../../ts/interfaces/fair-interfaces';
 
 function Fairs() {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [items, setItems] = useState<ListItem[]>([]);
     const { changeRoute } = useNavigate();
-    const screenHeight = Dimensions.get('window').height;
+    const screenHeight: number = Dimensions.get('window').height;
 
     const validSchema = yup.object().shape({
         feiras: yup.array().of(yup.number()).required()
@@ -40,20 +33,19 @@ function Fairs() {
     });
 
     useEffect(() => {
-        api.get('/fairs').then((response) => {
+        api.get<FairTO[]>('/fairs').then((response) => {
             const { data } = response;
-            setItems(data.map((item: Item): ListItem => ({
+            setItems(data.map((item: FairTO): ListItem => ({
                 name: item.siteName + '',
                 id: item.id + ''
             })));
 
-            setSelectedItems(data.map((item: Item) => item.id + ''));
+            setSelectedItems(data.map((item: FairTO) => item.id + ''));
         });
     }, []);
 
-    async function handleSubmit() {
+    async function handleSubmit(): Promise<void> {
         validSchema.validate({ feiras: selectedItems }).then(async () => {
-
             api.post('/customers/newfair', {
                 customerId: Number(await AsyncStorage.getItem('@storage_Id')),
                 idsFair: selectedItems.map(value => ({
@@ -81,34 +73,18 @@ function Fairs() {
         <View>
             <View style={{ height: "auto", maxHeight: screenHeight }}>
                 <View style={[styles.container, { marginTop: 32 }]}>
+                    <BackButton />
 
-                    <Button style={{ width: 118, backgroundColor: '#c62828' }} icon="keyboard-backspace" mode="contained" onPress={() => changeRoute(SystemRoutes.Main)}>
-                        Voltar
-                    </Button>
+                    <FairSVG width={148} height={148} style={styles.image} />
 
-                    <FairSVG width={148} height={148} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
-                    <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>
+                    <Paragraph style={{ marginBottom: 8 }}>
+                        Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!
+                    </Paragraph>
 
-                    <MultiSelect
-                        hideSubmitButton={true}
-                        uniqueKey="id"
-                        displayKey="name"
-                        items={items}
-                        onSelectedItemsChange={(items: string[]) => setSelectedItems([...items])}
-                        selectedItems={selectedItems}
-                        selectText="Selecione suas feiras"
-                        searchInputPlaceholderText="Busque os itens"
-                        tagRemoveIconColor="#5e35b1"
-                        tagBorderColor="#5e35b1"
-                        textColor='#424242'
-                        tagTextColor="#5e35b1"
-                        selectedItemTextColor="#5e35b1"
-                        selectedItemIconColor="#5e35b1"
-                        itemTextColor="#5e35b1"
-                        styleListContainer={{ height: 128 }}
-                        searchInputStyle={{ color: '#5e35b1', height: 50 }}
-                        submitButtonColor="#5e35b1"
-                        styleIndicator={{ height: 32, borderColor: '#5e35b1' }}
+                    <SelectBox 
+                        items={items} 
+                        selectedItems={selectedItems} 
+                        setSelectedItems={setSelectedItems}                      
                     />
 
                     <Button style={{ marginTop: 16 }} icon="update" mode="contained" onPress={handleSubmit}>
@@ -116,7 +92,9 @@ function Fairs() {
                     </Button>
                 </View>
                 
-                <Contact>Não precisa cadastrar seu ponto de vendas e quer uma feira não listada? Envie-nos uma mensagem!</Contact>
+                <Contact>
+                    Não precisa cadastrar seu ponto de vendas e quer uma feira não listada? Envie-nos uma mensagem!
+                </Contact>
             </View>
         </View>
     );

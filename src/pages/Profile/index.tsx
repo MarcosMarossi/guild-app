@@ -7,7 +7,7 @@ import styles from './style';
 import { toastError, toastValidation, toastSuccess } from '../../utils/toast-utils';
 import api from '../../services';
 import { Product } from '../../ts/interfaces/product-interfaces';
-import { User } from '../../ts/interfaces/user-interfaces';
+import { CustomerTO } from '../../ts/interfaces/user-interfaces';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import UserSVG from '../../assets/user.svg';
@@ -16,7 +16,7 @@ import ProductsSVG from '../../assets/products.svg';
 function Profile() {
     const [id, setId] = useState<number>();
     const [products, setProducts] = useState<Product[]>();
-    const [customer, setCustomer] = useState<User>({} as User);
+    const [customer, setCustomer] = useState<CustomerTO>({} as CustomerTO);
     const [whatsapp, setWhatsapp] = useState<string>('');
     const [newPassword, setNewPassword] = useState<string>('');
     const [name, setName] = useState<string>('');
