@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, ActivityIndicator } from 'react-native';
-import { Appbar, Chip, Paragraph, TextInput, Button } from 'react-native-paper';
+import { Chip, Paragraph, TextInput, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './style';
-import { toastError, toastValidation, toastSuccess } from '../../utils/toast-utils';
+import { toastError, toastSuccess } from '../../utils/toast-utils';
 import api from '../../services';
 import { Product } from '../../ts/interfaces/product-interfaces';
 import { CustomerTO } from '../../ts/interfaces/user-interfaces';
@@ -12,6 +12,7 @@ import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import UserSVG from '../../assets/user.svg';
 import ProductsSVG from '../../assets/products.svg';
+import BackButton from '../../components/BackButton';
 
 function Profile() {
     const [id, setId] = useState<number>();
@@ -72,13 +73,10 @@ function Profile() {
                         paddingBottom: 100,
                     }}>
                     <View style={[styles.container, { marginTop: 32 }]}>
-                        <Button style={{ width: 118, backgroundColor: '#c62828' }} icon="keyboard-backspace" mode="contained" onPress={() => changeRoute(SystemRoutes.Main)}>
-                            Voltar
-                        </Button>
                         
+                        <BackButton />                        
                         <Paragraph style={{ marginTop: 16 }}>Olá {customer.name}, nesta página você pode alterar suas informações!</Paragraph>
-
-                        <UserSVG width={128} height={128} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
+                        <UserSVG width={128} height={128} style={styles.image} />
 
                         <View>
                             <TextInput
@@ -138,7 +136,7 @@ function Profile() {
 
                     <View style={styles.container}>
                         <Paragraph style={{ fontWeight: 'bold' }}>Meus Produtos</Paragraph>
-                        <ProductsSVG width={128} height={128} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
+                        <ProductsSVG width={128} height={128} style={styles.image} />
 
                         <Paragraph style={styles.subtitle}>
                             Nesta seção estão listados todos {'\n'}os meus produtos.

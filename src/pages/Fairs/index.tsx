@@ -81,7 +81,8 @@ function Fairs() {
                         Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!
                     </Paragraph>
 
-                    <SelectBox 
+                    <SelectBox
+                        selectText='Selecione suas feiras'
                         items={items} 
                         selectedItems={selectedItems} 
                         setSelectedItems={setSelectedItems}                      

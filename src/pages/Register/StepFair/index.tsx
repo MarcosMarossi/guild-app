@@ -3,7 +3,6 @@ import { View, ScrollView, Dimensions } from 'react-native';
 import { Button, Checkbox, Paragraph } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as yup from 'yup';
-import MultiSelect from 'react-native-multiple-select';
 import styles from './style';
 import Contact from '../../../components/Contacts';
 import { setLocale } from 'yup';
@@ -13,6 +12,7 @@ import api from '../../../services';
 import { toastError, toastSuccess, toastValidation } from '../../../utils/toast-utils';
 import { useFarmerContext } from '../../../store';
 import FairSVG from '../../../assets/fair.svg';
+import SelectBox from '../../../components/SelectBox';
 
 interface Item {
     id: number,
@@ -105,30 +105,15 @@ function StepFair() {
         <View>
             <View style={{ height: "auto", maxHeight: screenHeight }}>
                 <View style={[styles.container, { marginTop: 32 }]}>
-                    <FairSVG width={148} height={148} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }}  />
+                    <FairSVG width={148} height={148} style={styles.image}  />
                     
                     <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de feira livre!</Paragraph>
 
-                    <MultiSelect
-                        hideSubmitButton={true}
-                        uniqueKey="id"
-                        displayKey="name"
-                        items={items}
-                        onSelectedItemsChange={(items: string[]) => setSelectedItems([...items])}
-                        selectedItems={selectedItems}
-                        selectText="Selecione suas feiras"
-                        searchInputPlaceholderText="Busque os itens"
-                        tagRemoveIconColor="#5e35b1"
-                        tagBorderColor="#5e35b1"
-                        textColor='#424242'
-                        tagTextColor="#5e35b1"
-                        selectedItemTextColor="#5e35b1"
-                        selectedItemIconColor="#5e35b1"
-                        itemTextColor="#5e35b1"
-                        styleListContainer={{ height: 128 }}
-                        searchInputStyle={{ color: '#5e35b1', height: 50 }}
-                        submitButtonColor="#5e35b1"
-                        styleIndicator={{ height: 32, borderColor: '#5e35b1' }}
+                    <SelectBox
+                        selectText='Selecione suas feiras'
+                        items={items} 
+                        selectedItems={selectedItems} 
+                        setSelectedItems={setSelectedItems}                      
                     />
 
                     <ScrollView
@@ -145,7 +130,7 @@ function StepFair() {
                             onPress={() => { setChecked(!checked); }}
                         />
 
-                        <View style={{ display: 'flex', flexDirection: 'row' }}>
+                        <View style={styles.button}>
                             <Button style={{ margin: 16 }} icon="arrow-left-circle-outline" mode="contained" onPress={handleNavigationToProducts}>
                                 Anterior
                             </Button>

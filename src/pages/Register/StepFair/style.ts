@@ -7,23 +7,15 @@ const styles = StyleSheet.create({
         padding: 24,
         borderRadius: 24
     },
-    image: {
-        width: 100,
-        height: 100,
-        justifyContent: "center",
-        alignSelf: "center",
-        marginTop: 16, 
-        marginBottom: 4, 
-        borderRadius: 25      
+    image: { 
+        alignSelf: 'center', 
+        justifyContent: 'center', 
+        margin: 4
     },
-    button: {        
-        height: 50,
-        flexDirection: 'row',
-        backgroundColor: '#448aff',
-        overflow: 'hidden',
-        alignItems: 'center',
-        marginTop:  4,
-    }, 
+    button: { 
+        display: 'flex', 
+        flexDirection: 'row' 
+    },
     buttonText: {
         flex: 1,
         justifyContent: 'center',

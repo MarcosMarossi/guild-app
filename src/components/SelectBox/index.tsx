@@ -3,12 +3,14 @@ import MultiSelect from 'react-native-multiple-select';
 import { ListItem } from '../../ts/interfaces/items-interfaces';
 
 interface Props {
+    selectText: string;
+    placeHolderText?: string;
     items: ListItem[],
     selectedItems: string[],
     setSelectedItems: Function
 }
 
-const SelectBox = ({ items, selectedItems, setSelectedItems }: Props) => {
+const SelectBox = ({ placeHolderText, selectText, items, selectedItems, setSelectedItems }: Props) => {
 
     return (
         <MultiSelect
@@ -18,11 +20,13 @@ const SelectBox = ({ items, selectedItems, setSelectedItems }: Props) => {
             items={items}
             onSelectedItemsChange={(items: string[]) => setSelectedItems([...items])}
             selectedItems={selectedItems}
-            selectText="Selecione suas feiras"
-            searchInputPlaceholderText="Busque os itens"
+            selectText={selectText}
+            searchInputPlaceholderText={placeHolderText ? placeHolderText : 'Busque seus itens'}
             tagRemoveIconColor="#5e35b1"
             tagBorderColor="#5e35b1"
-            textColor='#424242'
+            textColor="#424242"
+            noItemsText="Nenhum item foi encontrado"
+            selectedText={selectedItems.length > 1 ? 'selecionados' : 'selecionado'}
             tagTextColor="#5e35b1"
             selectedItemTextColor="#5e35b1"
             selectedItemIconColor="#5e35b1"

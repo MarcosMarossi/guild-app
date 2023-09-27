@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
 import { Button, Paragraph } from 'react-native-paper';
-import MultiSelect from 'react-native-multiple-select';
 import styles from './styles';
 import Contact from '../../../components/Contacts';
 import api from '../../../services';
@@ -9,6 +8,7 @@ import { useNavigate } from '../../../hooks/useNavigate';
 import { SystemRoutes } from '../../../ts/enums/routes';
 import { useFarmerContext } from '../../../store';
 import ProductsSVG from '../../../assets/products.svg';
+import SelectBox from '../../../components/SelectBox';
 
 interface Product {
   id: number,
@@ -54,30 +54,17 @@ const StepProducts = () => {
     <View>
       <View style={{ height: "auto", maxHeight: screenHeight }}>
         <View style={[styles.container, { marginTop: 32 }]}>
-          <ProductsSVG width={128} height={128} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
+          <ProductsSVG width={128} height={128} style={styles.image} />
 
           <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>
-          <MultiSelect
-            hideSubmitButton={true}
-            uniqueKey="id"
-            displayKey="name"
-            items={items}
-            onSelectedItemsChange={(items: string[]) => setSelectedItems([...items])}
-            selectedItems={selectedItems}
-            selectText="Selecione seus produtos"
-            searchInputPlaceholderText="Busque os itens"
-            tagRemoveIconColor="#5e35b1"
-            tagBorderColor="#5e35b1"
-            textColor='#424242'
-            tagTextColor="#5e35b1"
-            selectedItemTextColor="#5e35b1"
-            selectedItemIconColor="#5e35b1"
-            itemTextColor="#5e35b1"
-            styleListContainer={{ height: 128 }}
-            searchInputStyle={{ color: '#5e35b1', height: 50 }}
-            submitButtonColor="#5e35b1"
-            styleIndicator={{ height: 32, borderColor: '#5e35b1' }}
+          
+          <SelectBox
+            selectText='Selecione suas feiras'
+            items={items} 
+            selectedItems={selectedItems} 
+            setSelectedItems={setSelectedItems}                      
           />
+
           <ScrollView
             contentContainerStyle={{
               paddingHorizontal: 0,
