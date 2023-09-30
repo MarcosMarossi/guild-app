@@ -10,7 +10,7 @@ import { useNavigate } from '../../../hooks/useNavigate';
 import { SystemRoutes } from '../../../ts/enums/routes';
 import BackButton from '../../../components/BackButton';
 import { Formik } from 'formik';
-import { FairRequest, FairTO, Locality } from '../../../ts/interfaces/fair-interfaces';
+import { FairRequest, Fair, Locality } from '../../../ts/interfaces/fair-interfaces';
 import LocalSVG from '../../../assets/local.svg';
 import { useFarmerContext } from '../../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';

@@ -5,19 +5,20 @@ import { Linking, Platform } from 'react-native';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import styles from './style';
-import { DetailTO, FairTO } from '../../ts/interfaces/fair-interfaces';
+import { Fair } from '../../ts/interfaces/fair-interfaces';
 import { CustomerTO } from '../../ts/interfaces/user-interfaces';
 import api from '../../services';
 import FairSVG from '../../assets/fair.svg';
 import ProductsSVG from '../../assets/products.svg';
 import BackButton from '../../components/BackButton';
+import { getFairById } from '../../controllers';
 
 interface Params {
   id: number;
 }
 
 const Details = () => {
-  const [data, setData] = useState<FairTO>({} as FairTO);
+  const [data, setData] = useState<Fair>({} as Fair);
   const [customers, setCustomers] = useState<CustomerTO[]>([]);
   const [assessments, setAssessments] = useState<boolean>(false);
   const [complaints, setComplaints] = useState<boolean>(false);
@@ -25,10 +26,11 @@ const Details = () => {
   const routeParams = route.params as Params;
 
   useEffect(() => {
-    api.get<DetailTO>(`fairs/${routeParams.id}`).then((response) => {
-      setData(response.data);
-      setCustomers(response.data.customers);
-    });
+    getFairById(`${routeParams.id}`)
+      .then((response) => {
+        setData(response.data);
+        setCustomers(response.data.customers ? response.data.customers : []);
+      });
   }, []);
 
   const handleLinkToWhatsapp = (props: string): void => {
@@ -78,23 +80,23 @@ const Details = () => {
             <Paragraph style={styles.description}>Quantidade de parceiros: <Paragraph>{customers.length}</Paragraph></Paragraph>
 
             <View style={styles.actionContainer}>
-              <Button 
+              <Button
                 mode='elevated'
                 icon="map-marker-circle"
                 onPress={() => handleLinkToMap(data.latitude, data.longitude)}
               >
-                Ir até o local 
+                Ir até o local
               </Button>
-              
-              <Button 
-                mode='elevated' 
-                icon="star-shooting-outline" 
+
+              <Button
+                mode='elevated'
+                icon="star-shooting-outline"
                 onPress={() => setAssessments(true)}
               >
                 Avaliações
               </Button>
 
-              <Button 
+              <Button
                 mode='elevated'
                 icon="alert-circle"
                 onPress={() => setComplaints(true)}
@@ -113,7 +115,7 @@ const Details = () => {
               <Paragraph style={{ fontSize: 14 }}>Produtos anunciados: {customer.listProduct}</Paragraph>
               <Paragraph style={styles.description}>E-mail: {customer.email}</Paragraph>
 
-              <Button 
+              <Button
                 buttonColor='#4caf50'
                 style={{ marginTop: 16 }}
                 icon="whatsapp" mode="contained"
@@ -126,7 +128,7 @@ const Details = () => {
             :
             <View style={styles.container}>
               <Paragraph>Não há feirantes vinculados!</Paragraph>
-              
+
               <Paragraph style={{ marginTop: 24 }}>
                 O aplicativo não encontrou nenhum produtor ou feirante cadastrado nesta localidade.
               </Paragraph>
