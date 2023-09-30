@@ -59,7 +59,7 @@ const StepProducts = () => {
           <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>
           
           <SelectBox
-            selectText='Selecione suas feiras'
+            selectText='Selecione seus produtos'
             items={items} 
             selectedItems={selectedItems} 
             setSelectedItems={setSelectedItems}                      

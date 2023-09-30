@@ -2,14 +2,14 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({ 
   image: {
-    width: 50,
-    height: 50,
-    justifyContent: "center",
-    alignSelf: "center",
+    alignSelf: 'center',
+    justifyContent: 'center',
+    margin: 4
   },
   card: {
     margin: 16,
-    borderRadius: 24
+    borderRadius: 24,
+    backgroundColor: 'white'
   },
   notfound: {
     padding: 16,

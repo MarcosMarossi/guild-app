@@ -5,12 +5,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: 16,
     padding: 24,
+    borderRadius: 24
   },
-  image: {
-    width: '100%',
-    height: 80,
-    justifyContent: "center",
-    alignSelf: "center",
+  image: { 
+    alignSelf: 'center', 
+    justifyContent: 'center', 
+    margin: 4
   },
   title: {
     color: "#fff",

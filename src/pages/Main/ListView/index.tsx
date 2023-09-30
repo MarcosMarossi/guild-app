@@ -31,12 +31,12 @@ function List({ points }: IProps) {
                     {points.map(point => (
                         <Card style={styles.card} onPress={() => handleNavigateToDetail(point.id)} key={point.id}>
                             <Card.Content>
-                                <FairSVG width={148} height={148} style={{ alignSelf: 'center', justifyContent: 'center', margin: 4 }} />
+                                <FairSVG width={148} height={148} style={styles.image} />
 
                                 <Paragraph>Nome da feira: {point.siteName}</Paragraph>
-                                <Paragraph style={styles.description}>Descrição: {point.description}</Paragraph>
-                                <Paragraph style={styles.description}>Endereço: {point.address}, {point.city + ' - ' + point.uf}</Paragraph>
-                                <Paragraph style={styles.description}>Aberto em: {point.dayWeek}</Paragraph>
+                                <Paragraph>Descrição: {point.description}</Paragraph>
+                                <Paragraph>Endereço: {point.address}, {point.city + ' - ' + point.uf}</Paragraph>
+                                <Paragraph>Aberto em: {point.dayWeek ? point.dayWeek : 'Nenhuma informação cadastrada'}</Paragraph>
                             </Card.Content>
                         </Card>
                     ))}

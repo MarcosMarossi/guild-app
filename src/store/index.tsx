@@ -1,27 +1,21 @@
 import React, { createContext, useContext, useState } from 'react';
+import { FairRequest, Locality } from '../ts/interfaces/fair-interfaces';
 
 interface IProps {
-  fair: Fair;
-  setFair: Function;
-}
-
-interface Fair {
-  name: string;
-  email: string;
-  password: string;
-  whatsapp: number;
-  idsProduct: {
-    idProduct: string;
-  } [];
+  fair: FairRequest;
+  setFair: React.Dispatch<React.SetStateAction<FairRequest>>;
+  locality: Locality;
+  setLocality: React.Dispatch<React.SetStateAction<Locality>>;
 }
 
 const FarmerMarketContext = createContext({} as IProps);
 
 export function FarmerMarketProvider({ children }: any) {
-  const [fair, setFair] = useState<Fair>({} as Fair);
+  const [fair, setFair] = useState<FairRequest>({} as FairRequest);
+  const [locality, setLocality] = useState<Locality>({} as Locality);
 
   return (
-    <FarmerMarketContext.Provider value={{ fair, setFair }}>
+    <FarmerMarketContext.Provider value={{ fair, setFair, locality, setLocality }}>
       {children}
     </FarmerMarketContext.Provider>
   );

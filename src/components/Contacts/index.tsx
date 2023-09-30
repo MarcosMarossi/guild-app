@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Linking, StyleProp } from 'react-native';
-import { Button } from 'react-native-paper';
+import { View, StyleSheet, Linking, StyleProp } from 'react-native';
+import { Button, Paragraph } from 'react-native-paper';
 
 interface IProps {
     children: React.ReactNode;
@@ -14,7 +14,7 @@ const Contact = (props: IProps) => {
 
     return(
         <View style={[styles.container, props.style]}>
-            <Text style={styles.text}>{props.children}</Text>
+            <Paragraph style={styles.text}>{props.children}</Paragraph>
 
             <Button buttonColor='#4caf50' style={styles.button} icon="whatsapp" mode="contained" onPress={() => handleLinkToWhatsapp()}>
                 Entrar em contato

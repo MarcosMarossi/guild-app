@@ -13,6 +13,8 @@ import { toastError, toastSuccess, toastValidation } from '../../../utils/toast-
 import { useFarmerContext } from '../../../store';
 import FairSVG from '../../../assets/fair.svg';
 import SelectBox from '../../../components/SelectBox';
+import { authentication, handleCustomer } from '../../../controllers';
+import { LoginRequest } from '../../../ts/interfaces/user-interfaces';
 
 interface Item {
     id: number,
@@ -27,19 +29,11 @@ interface ListItem {
 function StepFair() {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [items, setItems] = useState<ListItem[]>([]);
-    const [checked, setChecked] = useState<boolean>(false);
+    const [myLocal, setMyLocal] = useState<boolean>(false);
     const screenHeight: number = Dimensions.get('window').height;
-    const { fair } = useFarmerContext();
-    
+    const { fair, setFair } = useFarmerContext();
+
     const { changeRoute } = useNavigate();
-
-    function handleNavigationToMain() {
-        changeRoute(SystemRoutes.Main);
-    }
-
-    function handleNavigationToLocality() {
-        changeRoute(SystemRoutes.Locality);
-    }
 
     setLocale({
         mixed: {
@@ -61,59 +55,48 @@ function StepFair() {
         });
     }, []);
 
-    function handleNavigationToProducts(): void {
-        changeRoute(SystemRoutes.StepProduct);
-    }
-
     async function handleSubmit(): Promise<void> {
-        validSchema.validate({ feiras: selectedItems }).then(() => {
-            api.post('/customers', {
-                name: fair.name.trim(),
-                email: fair.email.trim(),
-                whatsapp: fair.whatsapp,
-                customerPassword: fair.password.trim(),
-                idsProduct: fair.idsProduct,
-                idsFair: selectedItems.map(value => ({ idFair: value })),
-            }).then(() => {
-                api.post('/auth', {
-                    email: fair.email,
-                    customerPassword: fair.password,
-                }).then(async response => {
-                    await AsyncStorage.setItem('@storage_Key', response.data.type + ' ' + response.data.token);
-                    await AsyncStorage.setItem('@storage_Id', String(response.data.id));
-
-                    toastSuccess('Cadastro realizado com sucesso');
-
-                    if (checked) {
-                        handleNavigationToLocality();
-                        return;
-                    }
-
-                    handleNavigationToMain();
+        if (myLocal) {
+            setFair({ ...fair, idsFair: selectedItems.map(value => ({ idFair: value })) });
+            changeRoute(SystemRoutes.StepLocality);
+        }
+        else {
+            validSchema.validate({ selectedItems })
+                .then(() => {
+                    handleCustomer(fair)
+                        .then(() => {
+                            authentication({ email: fair.email, password: fair.password })
+                                .then(async (response) => {
+                                    await AsyncStorage.setItem('@storage_Key', response.data.type + ' ' + response.data.token);
+                                    await AsyncStorage.setItem('@storage_Id', String(response.data.id));
+                                    changeRoute(SystemRoutes.Main);
+                                });
+                        })
+                        .catch(() => {
+                            toastError('Falha ao registrar. Verifique novamente suas informações.');
+                        });
                 })
-            }).catch(() => {
-                toastError('Falha ao registrar. Verifique novamente suas informações.');
-            });
-        }).catch(function (err) {
-            err.errors.map((error: any) => {
-                toastValidation(`${error as string}`);
-            });
-        });
+                .catch(function (err) {
+                    err.errors.map((error: any) => {
+                        toastValidation(`${error as string}`);
+                    });
+                });
+        }
     }
 
     return (
         <View>
             <View style={{ height: "auto", maxHeight: screenHeight }}>
                 <View style={[styles.container, { marginTop: 32 }]}>
-                    <FairSVG width={148} height={148} style={styles.image}  />
-                    
+                    <FairSVG width={148} height={148} style={styles.image} />
+
                     <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de feira livre!</Paragraph>
 
                     <SelectBox
                         selectText='Selecione suas feiras'
-                        items={items} 
-                        selectedItems={selectedItems} 
-                        setSelectedItems={setSelectedItems}                      
+                        items={items}
+                        selectedItems={selectedItems}
+                        setSelectedItems={setSelectedItems}
                     />
 
                     <ScrollView
@@ -126,16 +109,16 @@ function StepFair() {
                             style={{ marginTop: 4 }}
                             label='Cadastrar meu local'
                             color='#5c6bc0'
-                            status={checked ? 'checked' : 'unchecked'}
-                            onPress={() => { setChecked(!checked); }}
+                            status={myLocal ? 'checked' : 'unchecked'}
+                            onPress={() => { setMyLocal(!myLocal); }}
                         />
 
                         <View style={styles.button}>
-                            <Button style={{ margin: 16 }} icon="arrow-left-circle-outline" mode="contained" onPress={handleNavigationToProducts}>
+                            <Button style={{ margin: 16 }} icon='arrow-left-circle-outline' mode="contained" onPress={() => changeRoute(SystemRoutes.StepProduct)}>
                                 Anterior
                             </Button>
-                            <Button style={{ margin: 16 }} icon="check-decagram-outline" mode="contained" onPress={handleSubmit}>
-                                Finalizar
+                            <Button style={{ margin: 16 }} icon={myLocal ? 'arrow-right-circle-outline' : 'check-decagram-outline'} mode="contained" onPress={handleSubmit}>
+                                {myLocal ? 'Próximo' : 'Finalizar'}
                             </Button>
                         </View>
 

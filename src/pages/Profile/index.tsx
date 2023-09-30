@@ -57,8 +57,7 @@ function Profile() {
             }).then(() => {
                 toastSuccess('A alteração solicitada ocorreu com sucesso.');
                 changeRoute(SystemRoutes.Main);
-            }).catch(error => {
-                console.log(error);
+            }).catch(() => {
                 toastError('Não conseguimos cadastrar suas atualizações.');
             });
     }

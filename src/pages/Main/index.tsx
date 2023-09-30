@@ -33,7 +33,6 @@ const Main = () => {
   }
 
   async function handleFairs(): Promise<void> {
-    console.log('searchQuery', searchQuery);
     await api.get<Point[]>(`/fairs/search?parameter=${searchQuery}`).then((response: AxiosResponse<Point[]>) => {
 
       setPoints(response.data);

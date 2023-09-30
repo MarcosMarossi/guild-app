@@ -8,7 +8,7 @@ import api from '../../services';
 import { toastError } from '../../utils/toast-utils';
 import LogoSVG from '../../assets/logo.svg';
 import styles from './style';
-import { LoginResponseTO } from '../../ts/interfaces/user-interfaces';
+import { LoginResponse } from '../../ts/interfaces/user-interfaces';
 
 const Login = () => {    
     const [email, setEmail] = useState<string>('');
@@ -23,7 +23,7 @@ const Login = () => {
     }
 
     async function authentication(): Promise<void> {        
-        api.post<LoginResponseTO>('/auth', {
+        api.post<LoginResponse>('/auth', {
             email: email.trim(),
             customerPassword: password.trim()
         }).then(async response => {
