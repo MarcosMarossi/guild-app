@@ -32,12 +32,14 @@ function Fairs() {
     });
 
     useEffect(() => {
-        getCustomerById().then((response) => {
-            setItems(response.data.fairs.map((item: Fair): ListItem => ({
+        findAllFairs().then((response) => {
+            setItems(response.data.map((item: Fair): ListItem => ({
                 name: item.siteName + '',
                 id: item.id + ''
             })));
+        })
 
+        getCustomerById().then((response) => {
             setSelectedItems(response.data.fairs.map((item: Fair) => item.id + ''));
         });
     }, []);
