@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, ActivityIndicator } from 'react-native';
 import { Chip, Paragraph, TextInput, Button } from 'react-native-paper';
@@ -7,17 +6,17 @@ import styles from './style';
 import { toastError, toastSuccess } from '../../utils/toast-utils';
 import api from '../../services';
 import { Product } from '../../ts/interfaces/product-interfaces';
-import { CustomerTO } from '../../ts/interfaces/user-interfaces';
+import { Customer } from '../../ts/interfaces/user-interfaces';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import UserSVG from '../../assets/user.svg';
 import ProductsSVG from '../../assets/products.svg';
 import BackButton from '../../components/BackButton';
+import { getCustomerById, updateCustomer } from '../../controllers';
 
 function Profile() {
-    const [id, setId] = useState<number>();
     const [products, setProducts] = useState<Product[]>();
-    const [customer, setCustomer] = useState<CustomerTO>({} as CustomerTO);
+    const [customer, setCustomer] = useState<Customer>({} as Customer);
     const [whatsapp, setWhatsapp] = useState<string>('');
     const [newPassword, setNewPassword] = useState<string>('');
     const [name, setName] = useState<string>('');
@@ -26,40 +25,22 @@ function Profile() {
     const [visible, setVisible] = useState<boolean>(false);
     const { changeRoute } = useNavigate();
 
-    const navigation = useNavigation();
-
     useEffect(() => {
-        getCustumerId();
-        if (typeof id !== "undefined") {
-            api.get(`/customers/${id}`).then(response => {
-                setProducts(response.data.products)
-                setCustomer(response.data)
-            });
-        }
-    }, [id]);
+        getCustomerById().then(response => {
+            setProducts(response.data.products)
+            setCustomer(response.data)
+        });
+    }, []);
 
-    async function getCustumerId() {
-        setId(Number(await AsyncStorage.getItem('@storage_Id')));
-    }
-
-    async function updateProfile(email: string) {
-        api.patch('/customers', {
-            email,
-            name,
-            whatsapp,
-            password,
-            customerNewPassword: newPassword,
-        },
-            {
-                headers: {
-                    'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
-                }
-            }).then(() => {
-                toastSuccess('A alteração solicitada ocorreu com sucesso.');
-                changeRoute(SystemRoutes.Main);
-            }).catch(() => {
-                toastError('Não conseguimos cadastrar suas atualizações.');
-            });
+    async function updateProfile() {
+        updateCustomer({
+            name, email, whatsapp, password, newPassword
+        }).then(() => {
+            toastSuccess('A alteração solicitada ocorreu com sucesso.');
+            changeRoute(SystemRoutes.Main);
+        }).catch(() => {
+            toastError('Não conseguimos cadastrar suas atualizações.');
+        });
     }
 
     return (
@@ -72,8 +53,8 @@ function Profile() {
                         paddingBottom: 100,
                     }}>
                     <View style={[styles.container, { marginTop: 32 }]}>
-                        
-                        <BackButton />                        
+
+                        <BackButton />
                         <Paragraph style={{ marginTop: 16 }}>Olá {customer.name}, nesta página você pode alterar suas informações!</Paragraph>
                         <UserSVG width={128} height={128} style={styles.image} />
 
@@ -123,7 +104,7 @@ function Profile() {
                                 </>
                             }
 
-                            <Button icon="content-save" mode="outlined" style={styles.button} onPress={() => updateProfile(customer.email)}>Salvar</Button>
+                            <Button icon="content-save" mode="outlined" style={styles.button} onPress={() => updateProfile()}>Salvar</Button>
                             <Button icon="account-edit" mode="outlined" style={styles.button} onPress={() => { setVisible(!visible) }}>Alterar senha</Button>
 
                         </View>

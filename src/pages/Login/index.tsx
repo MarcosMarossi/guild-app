@@ -4,49 +4,46 @@ import { TextInput, Text, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
-import api from '../../services';
 import { toastError } from '../../utils/toast-utils';
 import LogoSVG from '../../assets/logo.svg';
 import styles from './style';
-import { LoginResponse } from '../../ts/interfaces/user-interfaces';
+import { authentication } from '../../controllers';
 
-const Login = () => {    
+const Login = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [token] = useState<string>('');
     const { changeRoute } = useNavigate();
-    
+
     const screenHeight: number = Dimensions.get('window').height;
-    
-    function handleNavigationToMain(): void {     
+
+    function handleNavigationToMain(): void {
         changeRoute(SystemRoutes.Main, { token });
     }
 
-    async function authentication(): Promise<void> {        
-        api.post<LoginResponse>('/auth', {
-            email: email.trim(),
-            customerPassword: password.trim()
-        }).then(async response => {
-            const responseBody = response.data.type + ' ' + response.data.token;  
-            const id = response.data.id + '';      
-            await AsyncStorage.setItem('@storage_Id', id);         
-            await AsyncStorage.setItem('@storage_Key', responseBody);
-            handleNavigationToMain();
-        }). catch(() => {
-            toastError('Credenciais inválidas. Por favor, digite um e-mail e senha válidos.')
-        });
+    async function handleSubmit(): Promise<void> {
+        authentication({ email, password })
+            .then(async response => {
+                const responseBody = response.data.type + ' ' + response.data.token;
+                const id = response.data.id + '';
+                await AsyncStorage.setItem('@storage_Id', id);
+                await AsyncStorage.setItem('@storage_Key', responseBody);
+                handleNavigationToMain();
+            }).catch(() => {
+                toastError('Credenciais inválidas. Por favor, digite um e-mail e senha válidos.')
+            });
     }
 
     return (
         <View>
-            <View style={{ height: "auto" , maxHeight: screenHeight }}>                
-                <ScrollView 
-                    contentContainerStyle={{ 
+            <View style={{ height: "auto", maxHeight: screenHeight }}>
+                <ScrollView
+                    contentContainerStyle={{
                         paddingHorizontal: 0,
                         paddingBottom: 78,
                     }}
-                >  
-                    <View style={[styles.container, { marginTop: 32 }]}>                        
+                >
+                    <View style={[styles.container, { marginTop: 32 }]}>
                         <LogoSVG width={100} height={100} style={styles.image} />
 
                         <Text style={styles.description}>
@@ -73,9 +70,9 @@ const Login = () => {
                             onChangeText={text => setPassword(text)}
                         />
 
-                        <Button style={{ marginTop: 32 }} icon="login" mode="contained" onPress={authentication}>
+                        <Button style={{ marginTop: 32 }} icon="login" mode="contained" onPress={handleSubmit}>
                             Entrar
-                        </Button>        
+                        </Button>
                     </View>
                 </ScrollView>
             </View>

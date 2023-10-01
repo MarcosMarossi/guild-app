@@ -4,13 +4,13 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { useNavigate } from "../../../hooks/useNavigate";
 import { SystemRoutes } from "../../../ts/enums/routes";
-import { Point } from "../../../ts/interfaces/point-interfaces";
 import styles from "./style";
 import PointSVG from '../../../assets/points.svg';
+import { Fair } from "../../../ts/interfaces/fair-interfaces";
 
 
 interface IProps {
-  points: Point[];
+  points: Fair[];
 }
 
 const Points = ({ points }: IProps) => {
@@ -61,7 +61,7 @@ const Points = ({ points }: IProps) => {
               {points.map((point) => (
                 <Marker
                   key={point.id}
-                  onPress={() => handleNavigateToDetail(point.id)}
+                  onPress={() => handleNavigateToDetail(point.id!)}
                   coordinate={{
                     latitude: point.latitude,
                     longitude: point.longitude,

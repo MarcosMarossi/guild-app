@@ -13,7 +13,7 @@ import UserSVG from '../../assets/user.svg';
 function Register() {
     const { changeRoute } = useNavigate();
     const screenHeight = Dimensions.get('window').height;
-    const { setFair } = useFarmerContext();
+    const { setFair, fair} = useFarmerContext();
 
     const SignupSchema = Yup.object().shape({
         name: Yup.string()
@@ -44,7 +44,7 @@ function Register() {
             validationSchema={SignupSchema}
             onSubmit={({ name, email, whatsapp, password }) => {
                 changeRoute(SystemRoutes.StepProduct, { name, email, whatsapp, password });
-                setFair({ name, email, whatsapp, password });
+                setFair({ ...fair, name, email, whatsapp, password });
             }}
         >
             {({ handleChange, handleSubmit, errors }) => (

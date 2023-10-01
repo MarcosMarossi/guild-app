@@ -1,4 +1,4 @@
-import { CustomerTO } from "../user-interfaces";
+import { Customer } from "../user-interfaces";
 
 export interface Fair {
   siteName: string;
@@ -10,7 +10,7 @@ export interface Fair {
   latitude: number;
   longitude: number;
   id?: number;
-  customers?: CustomerTO[];
+  customers?: Customer[];
 }
 
 export interface FairRequest {

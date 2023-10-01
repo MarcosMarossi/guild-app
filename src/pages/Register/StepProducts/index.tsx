@@ -3,12 +3,12 @@ import { Dimensions, ScrollView, View } from 'react-native';
 import { Button, Paragraph } from 'react-native-paper';
 import styles from './styles';
 import Contact from '../../../components/Contacts';
-import api from '../../../services';
 import { useNavigate } from '../../../hooks/useNavigate';
 import { SystemRoutes } from '../../../ts/enums/routes';
 import { useFarmerContext } from '../../../store';
 import ProductsSVG from '../../../assets/products.svg';
 import SelectBox from '../../../components/SelectBox';
+import { findAllProducts } from '../../../controllers';
 
 interface Product {
   id: number,
@@ -29,7 +29,7 @@ const StepProducts = () => {
   const { fair, setFair } = useFarmerContext();
 
   useEffect(() => {
-    api.get<Product[]>("/products").then((response) => {
+    findAllProducts().then((response) => {
       setItems(response.data.map((item: Product): ListItem => ({
         name: item.name + '',
         id: item.id + ''

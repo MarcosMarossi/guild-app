@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react';
 import { Appbar, BottomNavigation, Menu, Searchbar } from 'react-native-paper';
 import { View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import api from '../../services';
-import { Point } from '../../ts/interfaces/point-interfaces';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import MapView from './MapView';
 import ListView from './ListView';
 import { AxiosResponse } from 'axios';
 import { RouteNav } from '../../ts/interfaces/routes-interfaces';
+import { findAllFairs, searchFairs } from '../../controllers';
+import { Fair } from '../../ts/interfaces/fair-interfaces';
 
 const Main = () => {
   const [index, setIndex] = useState<number>(0);
   const [visible, setVisible] = useState<boolean>(false);
   const [token, setToken] = useState<string>('invalid');
-  const [points, setPoints] = useState<Point[]>([]);
+  const [points, setPoints] = useState<Fair[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { changeRoute } = useNavigate();
   const[disableSearch, setDisableSearch] = useState<boolean>(false);
@@ -28,20 +28,20 @@ const Main = () => {
   async function getToken(): Promise<void> {
     const tokenStorage = await AsyncStorage.getItem('@storage_Key');
 
-    if (tokenStorage !== null)
+    if (tokenStorage !== null) {
       return setToken(tokenStorage);
+    }      
   }
 
   async function handleFairs(): Promise<void> {
-    await api.get<Point[]>(`/fairs/search?parameter=${searchQuery}`).then((response: AxiosResponse<Point[]>) => {
-
+    searchFairs(searchQuery).then((response: AxiosResponse<Fair[]>) => {
       setPoints(response.data);
     });
   }
 
   useEffect(() => {
     if(!searchQuery) {
-      api.get("/fairs").then((response: AxiosResponse<Point[]>) => {
+      findAllFairs().then((response: AxiosResponse<Fair[]>) => {
         setPoints(response.data);
       });
     }    

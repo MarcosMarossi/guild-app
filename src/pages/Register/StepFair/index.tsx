@@ -14,7 +14,6 @@ import { useFarmerContext } from '../../../store';
 import FairSVG from '../../../assets/fair.svg';
 import SelectBox from '../../../components/SelectBox';
 import { authentication, handleCustomer } from '../../../controllers';
-import { LoginRequest } from '../../../ts/interfaces/user-interfaces';
 
 interface Item {
     id: number,

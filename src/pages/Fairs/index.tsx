@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Dimensions } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as yup from 'yup';
 import styles from './style';
 import Contact from '../../components/Contacts';
 import { toastError, toastValidation, toastSuccess } from '../../utils/toast-utils';
 import { setLocale } from 'yup';
-import api from '../../services';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import { Button, Paragraph } from 'react-native-paper';

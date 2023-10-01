@@ -6,8 +6,7 @@ import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import styles from './style';
 import { Fair } from '../../ts/interfaces/fair-interfaces';
-import { CustomerTO } from '../../ts/interfaces/user-interfaces';
-import api from '../../services';
+import { Customer } from '../../ts/interfaces/user-interfaces';
 import FairSVG from '../../assets/fair.svg';
 import ProductsSVG from '../../assets/products.svg';
 import BackButton from '../../components/BackButton';
@@ -19,7 +18,7 @@ interface Params {
 
 const Details = () => {
   const [data, setData] = useState<Fair>({} as Fair);
-  const [customers, setCustomers] = useState<CustomerTO[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [assessments, setAssessments] = useState<boolean>(false);
   const [complaints, setComplaints] = useState<boolean>(false);
   const route = useRoute();

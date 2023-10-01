@@ -4,13 +4,12 @@ import { Card, Paragraph } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigate } from "../../../hooks/useNavigate";
 import styles from './style';
-import { Point } from '../../../ts/interfaces/point-interfaces';
 import { SystemRoutes } from '../../../ts/enums/routes';
 import FairSVG from '../../../assets/fair.svg';
-
+import { Fair } from '../../../ts/interfaces/fair-interfaces';
 
 interface IProps {
-    points: Point[];
+    points: Fair[];
 }
 
 function List({ points }: IProps) {
@@ -29,7 +28,7 @@ function List({ points }: IProps) {
                         paddingBottom: 8,
                     }}>
                     {points.map(point => (
-                        <Card style={styles.card} onPress={() => handleNavigateToDetail(point.id)} key={point.id}>
+                        <Card style={styles.card} onPress={() => handleNavigateToDetail(point.id!)} key={point.id}>
                             <Card.Content>
                                 <FairSVG width={148} height={148} style={styles.image} />
 

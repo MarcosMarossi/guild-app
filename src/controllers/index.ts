@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 import api from "../services";
 import { FairRequest, Fair, Locality } from "../ts/interfaces/fair-interfaces";
-import { LoginRequest, LoginResponse } from "../ts/interfaces/user-interfaces";
+import { LoginRequest, LoginResponse, UpdateCustomerRequest } from "../ts/interfaces/user-interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Product } from "../ts/interfaces/product-interfaces";
 
 export function handleCustomer(fair: FairRequest): Promise<AxiosResponse<Fair, any>> {
     return api.post<Fair>('/customers', {
@@ -17,8 +18,8 @@ export function handleCustomer(fair: FairRequest): Promise<AxiosResponse<Fair, a
 
 export function authentication(data: LoginRequest): Promise<AxiosResponse<LoginResponse, any>> {
     return api.post<LoginResponse>('/auth', {
-        email: data.email,
-        customerPassword: data.password,
+        email: data.email.trim(),
+        customerPassword: data.password.trim(),
     });
 }
 
@@ -60,4 +61,32 @@ export async function associate(selectedItems: string[]) {
             'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
         }
     });
+}
+
+export async function searchFairs(searchQuery: string): Promise<AxiosResponse<Fair[], any>> {
+    return await api.get<Fair[]>(`/fairs/search?parameter=${searchQuery}`)
+}
+
+export async function getCustomerById() {
+    const idUser: number = Number(await AsyncStorage.getItem('@storage_Id'));
+    return api.get(`/customers/${idUser}`);
+}
+
+export async function updateCustomer(data: UpdateCustomerRequest): Promise<void> {
+    api.patch('/customers', {
+        email: data.email.trim(),
+        name: data.name.trim(),
+        whatsapp: data.whatsapp.trim(),
+        password: data.password.trim(),
+        customerNewPassword: data.newPassword.trim(),
+    },
+    {
+        headers: {
+            'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
+        }
+    })
+}
+
+export function findAllProducts(): Promise<AxiosResponse<Product[], any>> {
+    return api.get<Product[]>("/products");
 }
