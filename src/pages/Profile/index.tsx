@@ -16,7 +16,6 @@ import { getCustomerById, updateCustomer } from '../../controllers';
 
 function Profile() {
     const [products, setProducts] = useState<Product[]>();
-    const [customer, setCustomer] = useState<Customer>({} as Customer);
     const [whatsapp, setWhatsapp] = useState<string>('');
     const [newPassword, setNewPassword] = useState<string>('');
     const [name, setName] = useState<string>('');
@@ -27,8 +26,10 @@ function Profile() {
 
     useEffect(() => {
         getCustomerById().then(response => {
-            setProducts(response.data.products)
-            setCustomer(response.data)
+            setProducts(response.data.products);
+            setEmail(response.data.email);
+            setName(response.data.name);
+            setWhatsapp(response.data.whatsapp);
         });
     }, []);
 
@@ -55,7 +56,7 @@ function Profile() {
                     <View style={[styles.container, { marginTop: 32 }]}>
 
                         <BackButton />
-                        <Paragraph style={{ marginTop: 16 }}>Olá {customer.name}, nesta página você pode alterar suas informações!</Paragraph>
+                        <Paragraph style={{ marginTop: 16 }}>Olá {name}, nesta página você pode alterar suas informações!</Paragraph>
                         <UserSVG width={128} height={128} style={styles.image} />
 
                         <View>
@@ -63,7 +64,7 @@ function Profile() {
                                 mode="outlined"
                                 style={{ marginTop: 8 }}
                                 label="Nome"
-                                value={name ? name : customer.name}
+                                value={name}
                                 onChangeText={text => setName(text)}
                             />
                             <TextInput
@@ -71,7 +72,7 @@ function Profile() {
                                 mode="outlined"
                                 style={{ marginTop: 8 }}
                                 label="E-mail"
-                                value={email ? email : customer.email}
+                                value={email}
                                 onChangeText={text => setEmail(text)}
                             />
                             <TextInput
@@ -79,7 +80,7 @@ function Profile() {
                                 mode="outlined"
                                 style={{ marginTop: 8 }}
                                 label="WhatsApp"
-                                value={whatsapp ? whatsapp : customer.whatsapp}
+                                value={whatsapp}
                                 onChangeText={text => setWhatsapp(text)}
                             />
 

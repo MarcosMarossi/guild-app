@@ -49,18 +49,28 @@ export function findAllFairs(): Promise<AxiosResponse<Fair[], any>> {
 }
 
 export async function associate(selectedItems: string[]) {
-    return api.post('/customers/newfair', 
-    {
-        customerId: Number(await AsyncStorage.getItem('@storage_Id')),
-        idsFair: selectedItems.map(value => ({
-            idFair: value,
-        }))
-    },
-    {
+    return api.post('/customers/newfair',
+        {
+            customerId: Number(await AsyncStorage.getItem('@storage_Id')),
+            idsFair: selectedItems.map(value => ({
+                idFair: value,
+            }))
+        },
+        {
+            headers: {
+                'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
+            }
+        });
+}
+
+export async function findCustomerById(): Promise<AxiosResponse<Fair[], any>> {
+    const idUser: number = Number(await AsyncStorage.getItem('@storage_Id'));
+
+    return api.get<Fair[]>(`/fairs/${idUser}`, {
         headers: {
             'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
         }
-    });
+    })
 }
 
 export async function searchFairs(searchQuery: string): Promise<AxiosResponse<Fair[], any>> {
@@ -69,22 +79,23 @@ export async function searchFairs(searchQuery: string): Promise<AxiosResponse<Fa
 
 export async function getCustomerById() {
     const idUser: number = Number(await AsyncStorage.getItem('@storage_Id'));
+    
     return api.get(`/customers/${idUser}`);
 }
 
 export async function updateCustomer(data: UpdateCustomerRequest): Promise<void> {
-    api.patch('/customers', {
+    return api.patch('/customers', {
         email: data.email.trim(),
         name: data.name.trim(),
         whatsapp: data.whatsapp.trim(),
         password: data.password.trim(),
         customerNewPassword: data.newPassword.trim(),
     },
-    {
-        headers: {
-            'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
-        }
-    })
+        {
+            headers: {
+                'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
+            }
+        })
 }
 
 export function findAllProducts(): Promise<AxiosResponse<Product[], any>> {

@@ -13,7 +13,7 @@ import SelectBox from '../../components/SelectBox';
 import { ListItem } from '../../ts/interfaces/items-interfaces';
 import BackButton from '../../components/BackButton';
 import { Fair } from '../../ts/interfaces/fair-interfaces';
-import { associate, findAllFairs } from '../../controllers';
+import { associate, findAllFairs, getCustomerById } from '../../controllers';
 
 function Fairs() {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -32,14 +32,13 @@ function Fairs() {
     });
 
     useEffect(() => {
-        findAllFairs().then((response) => {
-            const { data } = response;
-            setItems(data.map((item: Fair): ListItem => ({
+        getCustomerById().then((response) => {
+            setItems(response.data.fairs.map((item: Fair): ListItem => ({
                 name: item.siteName + '',
                 id: item.id + ''
             })));
 
-            setSelectedItems(data.map((item: Fair) => item.id + ''));
+            setSelectedItems(response.data.fairs.map((item: Fair) => item.id + ''));
         });
     }, []);
 
