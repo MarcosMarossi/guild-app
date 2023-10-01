@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MultiSelect from 'react-native-multiple-select';
 import { ListItem } from '../../ts/interfaces/items-interfaces';
+import { LogBox } from 'react-native';
 
 interface Props {
     selectText: string;
@@ -11,6 +12,10 @@ interface Props {
 }
 
 const SelectBox = ({ placeHolderText, selectText, items, selectedItems, setSelectedItems }: Props) => {
+
+    useEffect(() => {
+        LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+      }, []);
 
     return (
         <MultiSelect

@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     image: {
       alignSelf: 'center',
       justifyContent: 'center',
-      margin: 4
+      margin: 16
     },
     actionContainer: {
       display: 'flex',

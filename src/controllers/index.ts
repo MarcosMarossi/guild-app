@@ -48,13 +48,24 @@ export function findAllFairs(): Promise<AxiosResponse<Fair[], any>> {
     return api.get<Fair[]>('/fairs');
 }
 
-export async function associate(selectedItems: string[]) {
-    return api.post('/customers/newfair',
+export async function fairAssociation(fairsItems: string[]): Promise<AxiosResponse<any, any>> {
+    return api.post('/customers/new-association',
         {
             customerId: Number(await AsyncStorage.getItem('@storage_Id')),
-            idsFair: selectedItems.map(value => ({
-                idFair: value,
-            }))
+            idsFair: fairsItems.map(value => Number(value)),
+        },
+        {
+            headers: {
+                'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
+            }
+        });
+}
+
+export async function productAssociation(productItems: string[]): Promise<AxiosResponse<any, any>> {
+    return api.post('/customers/new-association',
+        {
+            customerId: Number(await AsyncStorage.getItem('@storage_Id')),
+            idsProduct: productItems.map(value => Number(value)),
         },
         {
             headers: {

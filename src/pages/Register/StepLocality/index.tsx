@@ -80,8 +80,6 @@ function LocalityStep() {
                             }}
                         >
                             <View style={[styles.container, { marginTop: 32 }]}>
-                                <BackButton />
-
                                 <LocalSVG width={148} height={148} style={styles.image} />
 
                                 <Paragraph style={{ marginBottom: 8, textAlign: 'justify' }}>

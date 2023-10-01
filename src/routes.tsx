@@ -11,6 +11,7 @@ import StepFair from "./pages/Register/StepFair";
 import StepProducts from "./pages/Register/StepProducts";
 import StepLocality from "./pages/Register/StepLocality";
 import Fairs from "./pages/Fairs";
+import Products from "./pages/Products";
 import Profile from "./pages/Profile";
 
 const Routes = () => {
@@ -28,6 +29,7 @@ const Routes = () => {
         <AppStack.Screen name={SystemRoutes.StepLocality} component={StepLocality} options={{ headerShown: false }} />
         <AppStack.Screen name={SystemRoutes.Profile} component={Profile} options={{ headerShown: false }} />
         <AppStack.Screen name={SystemRoutes.MyFair} component={Fairs} options={{ headerShown: false }} />
+        <AppStack.Screen name={SystemRoutes.Products} component={Products} options={{ headerShown: false }} />
       </AppStack.Navigator>
     </NavigationContainer>
   );

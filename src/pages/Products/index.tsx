@@ -8,14 +8,15 @@ import { setLocale } from 'yup';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import { Button, Paragraph } from 'react-native-paper';
-import FairSVG from '../../assets/fair.svg';
+import ProductsSVG from '../../assets/products.svg';
 import SelectBox from '../../components/SelectBox';
 import { ListItem } from '../../ts/interfaces/items-interfaces';
 import BackButton from '../../components/BackButton';
 import { Fair } from '../../ts/interfaces/fair-interfaces';
-import { fairAssociation, findAllFairs, getCustomerById } from '../../controllers';
+import { productAssociation, findAllProducts, getCustomerById } from '../../controllers';
+import { Product } from '../../ts/interfaces/product-interfaces';
 
-function Fairs() {
+function Products() {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [items, setItems] = useState<ListItem[]>([]);
     const { changeRoute } = useNavigate();
@@ -32,21 +33,21 @@ function Fairs() {
     });
 
     useEffect(() => {
-        findAllFairs().then((response) => {
-            setItems(response.data.map((item: Fair): ListItem => ({
-                name: item.siteName + '',
+        findAllProducts().then((response) => {
+            setItems(response.data.map((item: Product): ListItem => ({
+                name: item.name + '',
                 id: item.id + ''
             })));
         })
 
         getCustomerById().then((response) => {
-            setSelectedItems(response.data.fairs.map((item: Fair) => item.id + ''));
+            setSelectedItems(response.data.products.map((item: Fair) => item.id + ''));
         });
     }, []);
 
     async function handleSubmit(): Promise<void> {
         validSchema.validate({ fairs: selectedItems }).then(async () => {
-            fairAssociation(selectedItems).then(() => {
+            productAssociation(selectedItems).then(() => {
                 toastSuccess('Cadastro realizado com sucesso!');
                 changeRoute(SystemRoutes.Main);
             }).catch(() => {
@@ -63,6 +64,7 @@ function Fairs() {
         <View>
             <View style={{ height: "auto", maxHeight: screenHeight }}>
                 <ScrollView
+                    horizontal={false}
                     contentContainerStyle={{
                         paddingHorizontal: 0,
                         paddingBottom: 0,
@@ -71,14 +73,14 @@ function Fairs() {
                     <View style={[styles.container, { marginTop: 32 }]}>
                         <BackButton />
 
-                        <FairSVG width={132} height={132} style={styles.image} />
+                        <ProductsSVG width={132} height={132} style={styles.image} />
 
-                        <Paragraph>
-                            Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!
+                        <Paragraph style={{ marginBottom: 8 }}>
+                            Olá, precisa atualizar seus produtos?
                         </Paragraph>
 
                         <SelectBox
-                            selectText='Selecione suas feiras'
+                            selectText='Selecione seus produtos'
                             items={items}
                             selectedItems={selectedItems}
                             setSelectedItems={setSelectedItems}
@@ -92,10 +94,11 @@ function Fairs() {
                     <Contact>
                         Não precisa cadastrar seu ponto de vendas e quer uma feira não listada? Envie-nos uma mensagem!
                     </Contact>
+
                 </ScrollView>
             </View>
         </View>
     );
 }
 
-export default Fairs;
+export default Products;

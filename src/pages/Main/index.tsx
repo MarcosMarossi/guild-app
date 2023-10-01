@@ -70,6 +70,10 @@ const Main = () => {
                   changeRoute(SystemRoutes.MyFair);
                   setVisible(false);
                 }} />
+                <Menu.Item title="Meus Produtos" onPress={() => {
+                  changeRoute(SystemRoutes.Products);
+                  setVisible(false);
+                }} />
                 <Menu.Item title="Meu Perfil" onPress={() => {
                   changeRoute(SystemRoutes.Profile);
                   setVisible(false);
