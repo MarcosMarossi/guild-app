@@ -3,7 +3,7 @@ import { View, Dimensions, ScrollView } from 'react-native';
 import * as yup from 'yup';
 import styles from './style';
 import Contact from '../../components/Contacts';
-import { toastError, toastValidation, toastSuccess } from '../../utils/toast-utils';
+import { error, warn, success } from '../../utils/toast-utils';
 import { setLocale } from 'yup';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
@@ -17,7 +17,7 @@ import { fairAssociation, findAllFairs, getCustomerById } from '../../controller
 
 function Fairs() {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
-    const [items, setItems] = useState<ListItem[]>([]);
+    const [items , setItems] = useState<ListItem[]>([]);
     const { changeRoute } = useNavigate();
     const screenHeight: number = Dimensions.get('window').height;
 
@@ -45,16 +45,19 @@ function Fairs() {
     }, []);
 
     async function handleSubmit(): Promise<void> {
+        success('Cadastro realizado com sucesso!');
+        
+        
         validSchema.validate({ fairs: selectedItems }).then(async () => {
             fairAssociation(selectedItems).then(() => {
-                toastSuccess('Cadastro realizado com sucesso!');
+                success('Cadastro realizado com sucesso!');
                 changeRoute(SystemRoutes.Main);
             }).catch(() => {
-                toastError('Falha ao registrar a nova feira');
+                error('Falha ao registrar a nova feira');
             })
         }).catch(function (err) {
             err.errors.map((error: any) => {
-                toastValidation(`${error as string}.`);
+                warn(`${error as string}.`);
             });
         });
     }

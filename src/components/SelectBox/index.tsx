@@ -14,8 +14,8 @@ interface Props {
 const SelectBox = ({ placeHolderText, selectText, items, selectedItems, setSelectedItems }: Props) => {
 
     useEffect(() => {
-        LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
-      }, []);
+        LogBox.ignoreLogs(["VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead."]);
+    }, []);
 
     return (
         <MultiSelect

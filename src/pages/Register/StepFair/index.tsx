@@ -9,7 +9,7 @@ import { setLocale } from 'yup';
 import { useNavigate } from '../../../hooks/useNavigate';
 import { SystemRoutes } from '../../../ts/enums/routes';
 import api from '../../../services';
-import { toastError, toastSuccess, toastValidation } from '../../../utils/toast-utils';
+import { error, success, warn } from '../../../utils/toast-utils';
 import { useFarmerContext } from '../../../store';
 import FairSVG from '../../../assets/fair.svg';
 import SelectBox from '../../../components/SelectBox';
@@ -72,12 +72,12 @@ function StepFair() {
                                 });
                         })
                         .catch(() => {
-                            toastError('Falha ao registrar. Verifique novamente suas informações.');
+                            error('Falha ao registrar. Verifique novamente suas informações.');
                         });
                 })
                 .catch(function (err) {
                     err.errors.map((error: any) => {
-                        toastValidation(`${error as string}`);
+                        warn(`${error as string}`);
                     });
                 });
         }

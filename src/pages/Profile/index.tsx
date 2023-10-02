@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, ActivityIndicator } from 'react-native';
-import { Chip, Paragraph, TextInput, Button } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, ScrollView } from 'react-native';
+import { Paragraph, TextInput, Button } from 'react-native-paper';
 import styles from './style';
-import { toastError, toastSuccess } from '../../utils/toast-utils';
-import api from '../../services';
+import { error, success } from '../../utils/toast-utils';
 import { Product } from '../../ts/interfaces/product-interfaces';
-import { Customer } from '../../ts/interfaces/user-interfaces';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
 import UserSVG from '../../assets/user.svg';
-import ProductsSVG from '../../assets/products.svg';
 import BackButton from '../../components/BackButton';
 import { getCustomerById, updateCustomer } from '../../controllers';
+import Loading from '../../components/Loading';
 
 function Profile() {
     const [products, setProducts] = useState<Product[]>();
@@ -37,17 +34,16 @@ function Profile() {
         updateCustomer({
             name, email, whatsapp, password, newPassword
         }).then(() => {
-            toastSuccess('A alteração solicitada ocorreu com sucesso.');
+            success('A alteração solicitada ocorreu com sucesso.');
             changeRoute(SystemRoutes.Main);
         }).catch(() => {
-            toastError('Não conseguimos cadastrar suas atualizações.');
+            error('Não conseguimos cadastrar suas atualizações.');
         });
     }
 
     return (
         <View>
-            {typeof products !== 'undefined' ?
-
+            {products ?
                 <ScrollView
                     contentContainerStyle={{
                         paddingHorizontal: 8,
@@ -107,37 +103,13 @@ function Profile() {
 
                             <Button icon="content-save" mode="outlined" style={styles.button} onPress={() => updateProfile()}>Salvar</Button>
                             <Button icon="account-edit" mode="outlined" style={styles.button} onPress={() => { setVisible(!visible) }}>Alterar senha</Button>
-
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 }}>
-
-
-                        </View>
-                    </View>
-
-                    <View style={styles.container}>
-                        <Paragraph style={{ fontWeight: 'bold' }}>Meus Produtos</Paragraph>
-                        <ProductsSVG width={128} height={128} style={styles.image} />
-
-                        <Paragraph style={styles.subtitle}>
-                            Nesta seção estão listados todos {'\n'}os meus produtos.
-                        </Paragraph>
-
-                        {products?.map(product => (
-                            <Chip
-                                mode={'outlined'}
-                                icon='tag-heart'
-                                key={product.name}
-                                style={styles.chip}
-                                onPress={() => { }}>
-                                {product.name}
-                            </Chip>
-                        ))}
                     </View>
                 </ScrollView>
-
                 :
-                <ActivityIndicator style={{ marginTop: '50%' }} size="large" />
+                <>
+                    <Loading />                    
+                </>
             }
         </View>
     );

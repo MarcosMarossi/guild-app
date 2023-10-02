@@ -11,13 +11,14 @@ import FairSVG from '../../assets/fair.svg';
 import ProductsSVG from '../../assets/products.svg';
 import BackButton from '../../components/BackButton';
 import { getFairById } from '../../controllers';
+import Loading from '../../components/Loading';
 
 interface Params {
   id: number;
 }
 
 const Details = () => {
-  const [data, setData] = useState<Fair>({} as Fair);
+  const [data, setData] = useState<Fair>();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [assessments, setAssessments] = useState<boolean>(false);
   const [complaints, setComplaints] = useState<boolean>(false);
@@ -27,8 +28,8 @@ const Details = () => {
   useEffect(() => {
     getFairById(`${routeParams.id}`)
       .then((response) => {
-        setData(response.data);
         setCustomers(response.data.customers ? response.data.customers : []);
+        setData(response.data);
       });
   }, []);
 
@@ -46,7 +47,7 @@ const Details = () => {
 
   return (
     <View>
-      {data ?
+      {data && customers ?
         <ScrollView
           contentContainerStyle={{
             paddingHorizontal: 8,
@@ -135,9 +136,9 @@ const Details = () => {
           }
         </ScrollView>
         :
-        <View>
-          <ActivityIndicator style={{ marginTop: '50%' }} size="large" />
-        </View>
+        <>
+          <Loading />
+        </>
       }
     </View>
   );

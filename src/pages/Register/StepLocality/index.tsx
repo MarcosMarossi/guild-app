@@ -5,7 +5,7 @@ import axios from 'axios';
 import * as yup from 'yup';
 import styles from './style';
 import api from '../../../services';
-import { toastError, toastSuccess } from '../../../utils/toast-utils';
+import { error, success } from '../../../utils/toast-utils';
 import { useNavigate } from '../../../hooks/useNavigate';
 import { SystemRoutes } from '../../../ts/enums/routes';
 import BackButton from '../../../components/BackButton';
@@ -45,11 +45,11 @@ function LocalityStep() {
                             });
                     })
                     .catch(() => {
-                        toastError('Falha ao registrar. Verifique novamente suas informações.');
+                        error('Falha ao registrar. Verifique novamente suas informações.');
                     });
 
             }).catch(() => {
-                toastError('Ocorreu um erro ao cadastrar a feira.')
+                error('Ocorreu um erro ao cadastrar a feira.')
             });
     }
 
