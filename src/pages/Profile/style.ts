@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: 8,
     padding: 24,
-    borderRadius: 8
+    borderRadius: 24
   },
   image: { 
     alignSelf: 'center',

@@ -26,7 +26,8 @@
     "react-native-svg": "^13.10.0",
     "react-native-svg-transformer": "^1.1.0",
     "react-native-tiny-toast": "^1.0.7",
-    "yup": "^1.2.0"
+    "yup": "^1.2.0",
+    "expo-device": "~5.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

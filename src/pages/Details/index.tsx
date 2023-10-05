@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute } from "@react-navigation/native";
-import { ActivityIndicator, Button, Modal, Paragraph, Portal } from 'react-native-paper';
+import { Button, Paragraph } from 'react-native-paper';
 import { Linking, Platform } from 'react-native';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -12,6 +12,8 @@ import ProductsSVG from '../../assets/products.svg';
 import BackButton from '../../components/BackButton';
 import { getFairById } from '../../controllers';
 import Loading from '../../components/Loading';
+import AssessmentsModal from './ModalAssessments';
+import ModalComplaint from './ModalComplaint';
 
 interface Params {
   id: number;
@@ -20,8 +22,8 @@ interface Params {
 const Details = () => {
   const [data, setData] = useState<Fair>();
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [assessments, setAssessments] = useState<boolean>(false);
-  const [complaints, setComplaints] = useState<boolean>(false);
+  const [showAssessments, setShowAssessments] = useState<boolean>(false);
+  const [showComplaints, setShowComplaints] = useState<boolean>(false);
   const route = useRoute();
   const routeParams = route.params as Params;
 
@@ -53,17 +55,17 @@ const Details = () => {
             paddingHorizontal: 8,
           }}
         >
-          <Portal>
-            <Modal visible={assessments} onDismiss={() => setAssessments(false)} contentContainerStyle={styles.modalContainer}>
-              <Paragraph>Avaliações</Paragraph>
-            </Modal>
-          </Portal>
+          <AssessmentsModal 
+            showAssessments={showAssessments} 
+            setShowAssessments={setShowAssessments} 
+            idFair={routeParams.id} 
+          />
 
-          <Portal>
-            <Modal visible={complaints} onDismiss={() => setComplaints(false)} contentContainerStyle={styles.modalContainer}>
-              <Paragraph>Denunciar</Paragraph>
-            </Modal>
-          </Portal>
+          <ModalComplaint
+            showComplaints={showComplaints} 
+            setShowComplaints={setShowComplaints} 
+            idFair={routeParams.id} 
+          />
 
           <View style={[styles.container, { marginTop: 32 }]}>
             <BackButton />
@@ -91,7 +93,7 @@ const Details = () => {
               <Button
                 mode='elevated'
                 icon="star-shooting-outline"
-                onPress={() => setAssessments(true)}
+                onPress={() => setShowAssessments(true)}
               >
                 Avaliações
               </Button>
@@ -99,7 +101,7 @@ const Details = () => {
               <Button
                 mode='elevated'
                 icon="alert-circle"
-                onPress={() => setComplaints(true)}
+                onPress={() => setShowComplaints(true)}
               >
                 Denunciar
               </Button>

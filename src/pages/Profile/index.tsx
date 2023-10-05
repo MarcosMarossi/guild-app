@@ -36,7 +36,7 @@ function Profile() {
         }).then(() => {
             success('A alteração solicitada ocorreu com sucesso.');
             changeRoute(SystemRoutes.Main);
-        }).catch(() => {
+        }).catch((e) => {
             error('Não conseguimos cadastrar suas atualizações.');
         });
     }

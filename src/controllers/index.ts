@@ -4,9 +4,12 @@ import { FairRequest, Fair, Locality } from "../ts/interfaces/fair-interfaces";
 import { LoginRequest, LoginResponse, UpdateCustomerRequest } from "../ts/interfaces/user-interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Product } from "../ts/interfaces/product-interfaces";
+import { AssessmentRequest, AssessmentResponse } from "../ts/interfaces/assessments-interfaces";
+import { ComplaintRequest } from "../ts/interfaces/complaint-interfaces";
+
 
 export function handleCustomer(fair: FairRequest): Promise<AxiosResponse<Fair, any>> {
-    return api.post<Fair>('/customers', {
+    return api.post<Fair>('/guild/customers', {
         name: fair.name.trim(),
         email: fair.email.trim(),
         whatsapp: fair.whatsapp,
@@ -17,7 +20,7 @@ export function handleCustomer(fair: FairRequest): Promise<AxiosResponse<Fair, a
 }
 
 export function authentication(data: LoginRequest): Promise<AxiosResponse<LoginResponse, any>> {
-    return api.post<LoginResponse>('/auth', {
+    return api.post<LoginResponse>('/guild/auth', {
         email: data.email.trim(),
         customerPassword: data.password.trim(),
     });
@@ -41,15 +44,15 @@ export async function handleFair(data: Locality): Promise<AxiosResponse<Fair, an
 }
 
 export function getFairById(param: string): Promise<AxiosResponse<Fair, any>> {
-    return api.get<Fair>(`fairs/${param}`);
+    return api.get<Fair>(`/guild/fairs/${param}`);
 }
 
 export function findAllFairs(): Promise<AxiosResponse<Fair[], any>> {
-    return api.get<Fair[]>('/fairs');
+    return api.get<Fair[]>('/guild/fairs');
 }
 
 export async function fairAssociation(fairsItems: string[]): Promise<AxiosResponse<any, any>> {
-    return api.post('/customers/new-association',
+    return api.post('/guild/customers/new-association',
         {
             customerId: Number(await AsyncStorage.getItem('@storage_Id')),
             idsFair: fairsItems.map(value => Number(value)),
@@ -62,7 +65,7 @@ export async function fairAssociation(fairsItems: string[]): Promise<AxiosRespon
 }
 
 export async function productAssociation(productItems: string[]): Promise<AxiosResponse<any, any>> {
-    return api.post('/customers/new-association',
+    return api.post('/guild/customers/new-association',
         {
             customerId: Number(await AsyncStorage.getItem('@storage_Id')),
             idsProduct: productItems.map(value => Number(value)),
@@ -77,7 +80,7 @@ export async function productAssociation(productItems: string[]): Promise<AxiosR
 export async function findCustomerById(): Promise<AxiosResponse<Fair[], any>> {
     const idUser: number = Number(await AsyncStorage.getItem('@storage_Id'));
 
-    return api.get<Fair[]>(`/fairs/${idUser}`, {
+    return api.get<Fair[]>(`/guild/fairs/${idUser}`, {
         headers: {
             'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
         }
@@ -85,17 +88,17 @@ export async function findCustomerById(): Promise<AxiosResponse<Fair[], any>> {
 }
 
 export async function searchFairs(searchQuery: string): Promise<AxiosResponse<Fair[], any>> {
-    return await api.get<Fair[]>(`/fairs/search?parameter=${searchQuery}`)
+    return await api.get<Fair[]>(`/guild/fairs/search?parameter=${searchQuery}`)
 }
 
 export async function getCustomerById() {
     const idUser: number = Number(await AsyncStorage.getItem('@storage_Id'));
     
-    return api.get(`/customers/${idUser}`);
+    return api.get(`/guild/customers/${idUser}`);
 }
 
 export async function updateCustomer(data: UpdateCustomerRequest): Promise<void> {
-    return api.patch('/customers', {
+    return api.patch('/guild/customers', {
         email: data.email.trim(),
         name: data.name.trim(),
         whatsapp: data.whatsapp.trim(),
@@ -110,5 +113,17 @@ export async function updateCustomer(data: UpdateCustomerRequest): Promise<void>
 }
 
 export function findAllProducts(): Promise<AxiosResponse<Product[], any>> {
-    return api.get<Product[]>("/products");
+    return api.get<Product[]>("/guild/products");
+}
+
+export function handleAssessement(data: AssessmentRequest): Promise<void> {
+    return api.post("/feedback/assessments", data);
+}
+
+export function findAssessmentByFairId(fairId: number): Promise<AxiosResponse<AssessmentResponse[], any>> {
+    return api.get<AssessmentResponse[]>(`/feedback/assessments?idFair=${fairId}`);
+}
+
+export function handleComplaint(data: ComplaintRequest): Promise<void> {
+    return api.post("/feedback/complaints", data);
 }
