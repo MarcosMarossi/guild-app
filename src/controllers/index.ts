@@ -6,9 +6,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Product } from "../ts/interfaces/product-interfaces";
 import { AssessmentRequest, AssessmentResponse } from "../ts/interfaces/assessments-interfaces";
 import { ComplaintRequest } from "../ts/interfaces/complaint-interfaces";
+import { GUILD_API_KEY, FEEDBACK_API_KEY, GOOGLE_KEY } from '@env';
 
 
 export function handleCustomer(fair: FairRequest): Promise<AxiosResponse<Fair, any>> {
+    console.log(GUILD_API_KEY)
     return api.post<Fair>('/guild/customers', {
         name: fair.name.trim(),
         email: fair.email.trim(),
@@ -16,6 +18,11 @@ export function handleCustomer(fair: FairRequest): Promise<AxiosResponse<Fair, a
         customerPassword: fair.password.trim(),
         idsProduct: fair.idsProduct,
         idsFair: fair.idsFair
+    },
+    {
+        headers: {
+            'API_KEY': `${GUILD_API_KEY}`
+        }
     });
 }
 
@@ -23,11 +30,18 @@ export function authentication(data: LoginRequest): Promise<AxiosResponse<LoginR
     return api.post<LoginResponse>('/guild/auth', {
         email: data.email.trim(),
         customerPassword: data.password.trim(),
+    },
+    {
+        headers: {
+            'API_KEY': `${GUILD_API_KEY}`
+        }
     });
 }
 
 export async function handleFair(data: Locality): Promise<AxiosResponse<Fair, any>> {
-    const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${data.address},${data.city},${data.uf}&key=AIzaSyCxtyT9bRUZ9K6JsBnT9c78HdngipWr5TI`);
+    const googleKey: string = GOOGLE_KEY;
+
+    const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${data.address},${data.city},${data.uf}&key=${googleKey}`);
     const completeAddress = response.data.results[0].formatted_address;
     const { lat, lng } = response.data.results[0].geometry.location;
 
@@ -40,15 +54,31 @@ export async function handleFair(data: Locality): Promise<AxiosResponse<Fair, an
         city: data.city.trim(),
         uf: data.uf.trim(),
         dayWeek: data.dayWeek.trim(),
+    },
+    {
+        headers: {
+            'API_KEY': `${GUILD_API_KEY}`
+        }
     });
 }
 
 export function getFairById(param: string): Promise<AxiosResponse<Fair, any>> {
-    return api.get<Fair>(`/guild/fairs/${param}`);
+    return api.get<Fair>(`/guild/fairs/${param}`,
+    {
+        headers: {
+            'API_KEY': `${GUILD_API_KEY}`
+        }
+    });
 }
 
 export function findAllFairs(): Promise<AxiosResponse<Fair[], any>> {
-    return api.get<Fair[]>('/guild/fairs');
+    console.log(GUILD_API_KEY)
+    return api.get<Fair[]>('/guild/fairs',
+    {
+        headers: {
+            'API_KEY': `${GUILD_API_KEY}`
+        }
+    });
 }
 
 export async function fairAssociation(fairsItems: string[]): Promise<AxiosResponse<any, any>> {
@@ -60,6 +90,7 @@ export async function fairAssociation(fairsItems: string[]): Promise<AxiosRespon
         {
             headers: {
                 'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
+                'API_KEY': `${GUILD_API_KEY}`
             }
         });
 }
@@ -73,28 +104,29 @@ export async function productAssociation(productItems: string[]): Promise<AxiosR
         {
             headers: {
                 'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
+                'API_KEY': `${GUILD_API_KEY}`
             }
         });
 }
 
-export async function findCustomerById(): Promise<AxiosResponse<Fair[], any>> {
-    const idUser: number = Number(await AsyncStorage.getItem('@storage_Id'));
-
-    return api.get<Fair[]>(`/guild/fairs/${idUser}`, {
-        headers: {
-            'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
-        }
-    })
-}
-
 export async function searchFairs(searchQuery: string): Promise<AxiosResponse<Fair[], any>> {
-    return await api.get<Fair[]>(`/guild/fairs/search?parameter=${searchQuery}`)
+    return await api.get<Fair[]>(`/guild/fairs/search?parameter=${searchQuery}`,
+    {
+        headers: {
+            'API_KEY': `${GUILD_API_KEY}`
+        }
+    });
 }
 
 export async function getCustomerById() {
     const idUser: number = Number(await AsyncStorage.getItem('@storage_Id'));
     
-    return api.get(`/guild/customers/${idUser}`);
+    return api.get(`/guild/customers/${idUser}`, {
+        headers: {
+            'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
+            'API_KEY': `${GUILD_API_KEY}`
+        }
+    });
 }
 
 export async function updateCustomer(data: UpdateCustomerRequest): Promise<void> {
@@ -105,25 +137,46 @@ export async function updateCustomer(data: UpdateCustomerRequest): Promise<void>
         password: data.password.trim(),
         customerNewPassword: data.newPassword.trim(),
     },
-        {
-            headers: {
-                'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
-            }
-        })
+    {
+        headers: {
+            'Authorization': `${await AsyncStorage.getItem('@storage_Key')}`,
+            'API_KEY': `${GUILD_API_KEY}`
+        }
+    });
 }
 
 export function findAllProducts(): Promise<AxiosResponse<Product[], any>> {
-    return api.get<Product[]>("/guild/products");
+    return api.get<Product[]>("/guild/products", 
+    {
+        headers: {
+            'API_KEY': `${GUILD_API_KEY}`
+        }
+    });
 }
 
 export function handleAssessement(data: AssessmentRequest): Promise<void> {
-    return api.post("/feedback/assessments", data);
+    return api.post("/feedback/assessments", data,
+    {
+        headers: {
+            'API_KEY': `${FEEDBACK_API_KEY}`,
+        }
+    });
 }
 
 export function findAssessmentByFairId(fairId: number): Promise<AxiosResponse<AssessmentResponse[], any>> {
-    return api.get<AssessmentResponse[]>(`/feedback/assessments?idFair=${fairId}`);
+    return api.get<AssessmentResponse[]>(`/feedback/assessments?idFair=${fairId}`,
+    {
+        headers: {
+            'API_KEY': `${FEEDBACK_API_KEY}`,
+        }
+    });
 }
 
 export function handleComplaint(data: ComplaintRequest): Promise<void> {
-    return api.post("/feedback/complaints", data);
+    return api.post("/feedback/complaints", data,
+    {
+        headers: {
+            'API_KEY': `${FEEDBACK_API_KEY}`,
+        }
+    });
 }
