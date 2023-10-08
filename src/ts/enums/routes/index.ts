@@ -11,5 +11,7 @@ export enum SystemRoutes {
     StepFair = 'StepFair',
     MyFair = 'MyFair',
     StepLocality = 'Locality',
-    Products = 'Products'
+    Products = 'Products',
+    StepCode = 'StepCode',
+    StepPassword = 'StepPassword',
 }

@@ -23,3 +23,21 @@ export interface LoginResponse {
     type: string,
     id: number,
 }
+
+export interface RecoveryRequest {
+    password: string,
+    code: number,
+    whatsapp: string,
+}
+
+export interface CodeRequest {
+    recipient: string,
+    sender: string,
+    accountSID: string,
+    authToken: string,
+}
+
+export interface CodeResponse {
+    sid: string,
+    time: string
+}

@@ -21,11 +21,6 @@ const styles = StyleSheet.create({
     input: {
         marginTop: 16,
     },
-    link: {
-        marginTop: 16,
-        color: 'hotpink',
-        textDecorationLine: 'underline'
-    }
 });
 
 export default styles;

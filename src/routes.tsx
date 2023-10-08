@@ -13,6 +13,8 @@ import StepLocality from "./pages/Register/StepLocality";
 import Fairs from "./pages/Fairs";
 import Products from "./pages/Products";
 import Profile from "./pages/Profile";
+import StepCode from "./pages/Forgot/StepCode";
+import StepPassword from "./pages/Forgot/StepPassword";
 
 const Routes = () => {
   const AppStack = createStackNavigator();
@@ -30,6 +32,8 @@ const Routes = () => {
         <AppStack.Screen name={SystemRoutes.Profile} component={Profile} options={{ headerShown: false }} />
         <AppStack.Screen name={SystemRoutes.MyFair} component={Fairs} options={{ headerShown: false }} />
         <AppStack.Screen name={SystemRoutes.Products} component={Products} options={{ headerShown: false }} />
+        <AppStack.Screen name={SystemRoutes.StepCode} component={StepCode} options={{ headerShown: false }} />
+        <AppStack.Screen name={SystemRoutes.StepPassword} component={StepPassword} options={{ headerShown: false }} />
       </AppStack.Navigator>
     </NavigationContainer>
   );

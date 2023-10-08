@@ -80,6 +80,8 @@ function Profile() {
                                 onChangeText={text => setWhatsapp(text)}
                             />
 
+                            <Button icon="account-edit" mode="outlined" style={styles.button} onPress={() => { setVisible(!visible) }}>Alterar senha</Button>
+
                             {visible &&
                                 <>
                                     <TextInput
@@ -101,8 +103,7 @@ function Profile() {
                                 </>
                             }
 
-                            <Button icon="content-save" mode="outlined" style={styles.button} onPress={() => updateProfile()}>Salvar</Button>
-                            <Button icon="account-edit" mode="outlined" style={styles.button} onPress={() => { setVisible(!visible) }}>Alterar senha</Button>
+                            <Button icon="content-save" mode="outlined" style={styles.button} onPress={() => updateProfile()}>Salvar</Button>                            
                         </View>
                     </View>
                 </ScrollView>

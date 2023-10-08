@@ -17,8 +17,8 @@ const Main = () => {
   const [token, setToken] = useState<string>('invalid');
   const [points, setPoints] = useState<Fair[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const { changeRoute } = useNavigate();
-  const[disableSearch, setDisableSearch] = useState<boolean>(false);
+  const { changeRoute, resetPages } = useNavigate();
+  const [disableSearch, setDisableSearch] = useState<boolean>(false);
 
   const [routes] = useState<RouteNav[]>([
     { key: 'map', title: 'Localizações', focusedIcon: 'google-maps', unfocusedIcon: 'google-maps' },
@@ -30,7 +30,7 @@ const Main = () => {
 
     if (tokenStorage !== null) {
       return setToken(tokenStorage);
-    }      
+    }
   }
 
   async function handleFairs(): Promise<void> {
@@ -40,12 +40,16 @@ const Main = () => {
   }
 
   useEffect(() => {
-    if(!searchQuery) {
-      findAllFairs().then((response: AxiosResponse<Fair[]>) => {
-        setPoints(response.data);
-      });
-    }    
+    if (!searchQuery) {
+      getFairs();
+    }
   }, [token]);
+
+  function getFairs() {
+    findAllFairs().then((response: AxiosResponse<Fair[]>) => {
+      setPoints(response.data);
+    });
+  }
 
   return (
     <>
@@ -53,7 +57,7 @@ const Main = () => {
         <Appbar.Header>
           <Appbar.Content mode='small' title="Feira Guild" style={{ marginRight: 16 }} color="#c62828" />
           <Appbar.Action icon="magnify" onPress={() => setDisableSearch(!disableSearch)} />
-          
+
           <Menu
             onDismiss={() => setVisible(false)}
             visible={visible}
@@ -81,6 +85,7 @@ const Main = () => {
                 <Menu.Item title="Sair" onPress={async () => {
                   setToken('invalid');
                   await AsyncStorage.setItem('@storage_Key', 'invalid');
+                  resetPages(SystemRoutes.Login)
                 }} />
               </>
               :
@@ -106,10 +111,11 @@ const Main = () => {
               onChangeText={text => setSearchQuery(text)}
               value={searchQuery}
               onSubmitEditing={handleFairs}
+              onClearIconPress={getFairs}
             />
-          </View>   
-        )}         
-        
+          </View>
+        )}
+
         <BottomNavigation
           navigationState={{ index, routes }}
           onIndexChange={setIndex}

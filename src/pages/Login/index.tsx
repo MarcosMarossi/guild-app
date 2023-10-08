@@ -8,6 +8,7 @@ import { error } from '../../utils/toast-utils';
 import LogoSVG from '../../assets/logo.svg';
 import styles from './style';
 import { authentication } from '../../controllers';
+import { Link } from '@react-navigation/native';
 
 const Login = () => {
     const [email, setEmail] = useState<string>('');
@@ -69,6 +70,10 @@ const Login = () => {
                             secureTextEntry={true}
                             onChangeText={text => setPassword(text)}
                         />
+
+                        <Link to={{ screen: SystemRoutes.StepCode }} style={styles.link}>
+                            Esqueci minha senha
+                        </Link>
 
                         <Button style={{ marginTop: 32 }} icon="login" mode="contained" onPress={handleSubmit}>
                             Entrar
