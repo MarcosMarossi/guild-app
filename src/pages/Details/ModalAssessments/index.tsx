@@ -8,8 +8,8 @@ import { ScrollView, View } from 'react-native';
 import { findAssessmentByFairId, handleAssessement } from '../../../controllers';
 import { AssessmentResponse } from '../../../ts/interfaces/assessments-interfaces';
 import * as Device from 'expo-device';
-import { error, success } from '../../../utils/toast-utils';
 import RatingSvg from '../../../assets/rating.svg';
+import { showToast } from '../../../utils/message-utils';
 
 interface IProps {
     idFair: number;
@@ -53,9 +53,9 @@ const AssessmentsModal = ({ idFair, showAssessments, setShowAssessments }: IProp
                     serialNumber: `${Device.osBuildId}`
                 }).then(() => {
                     setShowAssessments(false);
-                    success('Comentário publicado com sucesso!');
+                    showToast('Comentário publicado com sucesso!');
                 }).catch(() => {
-                    error('Ocorreu um problema ao fazer a publição.');
+                    showToast('Ocorreu um problema ao fazer a publição.');
                 });
             }}
         >

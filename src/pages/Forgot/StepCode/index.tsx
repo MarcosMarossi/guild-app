@@ -7,9 +7,9 @@ import styles from './style';
 import { sendCustomerCode } from '../../../controllers';
 import { ACCOUNT_SID_TWILIO, AUTH_TOKEN_TWILIO } from '@env';
 import { SystemRoutes } from '../../../ts/enums/routes';
-import { error, success } from '../../../utils/toast-utils';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { showToast } from '../../../utils/message-utils';
 
 const StepCode = () => {
     const { changeRoute } = useNavigate();
@@ -36,9 +36,9 @@ const StepCode = () => {
                         phone
                     });
 
-                    success('Foi enviado o código de verificação com sucesso. Cheque nas mensagens do seu celular.');
+                    showToast('Foi enviado o código de verificação com sucesso. Cheque nas mensagens do seu celular.');
                 }).catch(() => {
-                    error('Ocorreu um problema ao gerar o código de autorização!');
+                    showToast('Ocorreu um problema ao gerar o código de autorização!');
                 });
             }}
         >
@@ -51,7 +51,7 @@ const StepCode = () => {
                                 paddingBottom: 78,
                             }}
                         >
-                            <View style={[styles.container, { marginTop: 32 }]}>
+                            <View style={[styles.container, { marginTop: 40 }]}>
                                 <LogoSVG width={100} height={100} style={styles.image} />
 
                                 <Paragraph>

@@ -53,7 +53,7 @@ const StepProducts = () => {
   return (
     <View>
       <View style={{ height: "auto", maxHeight: screenHeight }}>
-        <View style={[styles.container, { marginTop: 32 }]}>
+        <View style={[styles.container, { marginTop: 40 }]}>
           <ProductsSVG width={128} height={128} style={styles.image} />
 
           <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>

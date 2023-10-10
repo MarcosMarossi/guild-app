@@ -7,9 +7,9 @@ import * as Yup from 'yup';
 import styles from './style';
 import { updateCustomerPassword } from '../../../controllers';
 import { useRoute } from "@react-navigation/native";
-import { error, success } from '../../../utils/toast-utils';
 import { useNavigate } from '../../../hooks/useNavigate';
 import { SystemRoutes } from '../../../ts/enums/routes';
+import { showToast } from '../../../utils/message-utils';
 
 interface Params {
     phone: string;
@@ -45,10 +45,10 @@ const StepPassword = () => {
                     password,
                     whatsapp: routeParams.phone
                 }).then(() => {
-                    success('Senha alterada com sucesso!');
+                    showToast('Senha alterada com sucesso!');
                     changeRoute(SystemRoutes.Login);
                 }).catch(() => {
-                    error('Erro ao alterar a senha. Verifique as informações novamente!');
+                    showToast('Erro ao alterar a senha. Verifique as informações novamente!');
                 });
             }}
         >
@@ -62,7 +62,7 @@ const StepPassword = () => {
                                 paddingBottom: 78,
                             }}
                         >
-                            <View style={[styles.container, { marginTop: 32 }]}>
+                            <View style={[styles.container, { marginTop: 40 }]}>
                                 <LogoSVG width={100} height={100} style={styles.image} />
 
                                 <Paragraph>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Paragraph, TextInput, Button } from 'react-native-paper';
 import styles from './style';
-import { error, success } from '../../utils/toast-utils';
 import { Product } from '../../ts/interfaces/product-interfaces';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
@@ -10,6 +9,7 @@ import UserSVG from '../../assets/user.svg';
 import BackButton from '../../components/BackButton';
 import { getCustomerById, updateCustomer } from '../../controllers';
 import Loading from '../../components/Loading';
+import { showToast } from '../../utils/message-utils';
 
 function Profile() {
     const [products, setProducts] = useState<Product[]>();
@@ -34,10 +34,10 @@ function Profile() {
         updateCustomer({
             name, email, whatsapp, password, newPassword
         }).then(() => {
-            success('A alteração solicitada ocorreu com sucesso.');
+            showToast('A alteração solicitada ocorreu com sucesso.');
             changeRoute(SystemRoutes.Main);
         }).catch((e) => {
-            error('Não conseguimos cadastrar suas atualizações.');
+            showToast('Não conseguimos cadastrar suas atualizações.');
         });
     }
 
@@ -49,7 +49,7 @@ function Profile() {
                         paddingHorizontal: 8,
                         paddingBottom: 100,
                     }}>
-                    <View style={[styles.container, { marginTop: 32 }]}>
+                    <View style={[styles.container, { marginTop: 40 }]}>
 
                         <BackButton />
                         <Paragraph style={{ marginTop: 16 }}>Olá {name}, nesta página você pode alterar suas informações!</Paragraph>

@@ -4,11 +4,11 @@ import { TextInput, Text, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
-import { error } from '../../utils/toast-utils';
 import LogoSVG from '../../assets/logo.svg';
 import styles from './style';
 import { authentication } from '../../controllers';
 import { Link } from '@react-navigation/native';
+import { showToast } from '../../utils/message-utils';
 
 const Login = () => {
     const [email, setEmail] = useState<string>('');
@@ -31,7 +31,7 @@ const Login = () => {
                 await AsyncStorage.setItem('@storage_Key', responseBody);
                 handleNavigationToMain();
             }).catch(() => {
-                error('Credenciais inválidas. Por favor, digite um e-mail e senha válidos.')
+                showToast('Credenciais inválidas. Por favor, digite um e-mail e senha válidos.')
             });
     }
 
@@ -44,7 +44,7 @@ const Login = () => {
                         paddingBottom: 78,
                     }}
                 >
-                    <View style={[styles.container, { marginTop: 32 }]}>
+                    <View style={[styles.container, { marginTop: 40 }]}>
                         <LogoSVG width={100} height={100} style={styles.image} />
 
                         <Text style={styles.description}>

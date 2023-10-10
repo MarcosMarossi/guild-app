@@ -8,17 +8,12 @@ import Contact from '../../../components/Contacts';
 import { setLocale } from 'yup';
 import { useNavigate } from '../../../hooks/useNavigate';
 import { SystemRoutes } from '../../../ts/enums/routes';
-import api from '../../../services';
-import { error, success, warn } from '../../../utils/toast-utils';
 import { useFarmerContext } from '../../../store';
 import FairSVG from '../../../assets/fair.svg';
 import SelectBox from '../../../components/SelectBox';
-import { authentication, handleCustomer } from '../../../controllers';
-
-interface Item {
-    id: number,
-    siteName: string
-}
+import { authentication, findAllFairs, handleCustomer } from '../../../controllers';
+import { showToast } from '../../../utils/message-utils';
+import { Fair, FairRequest } from '../../../ts/interfaces/fair-interfaces';
 
 interface ListItem {
     id: string,
@@ -45,9 +40,9 @@ function StepFair() {
     });
 
     useEffect(() => {
-        api.get("/fairs").then((response) => {
+        findAllFairs().then((response) => {
             const { data } = response;
-            setItems(data.map((item: Item): ListItem => ({
+            setItems(data.map((item: Fair): ListItem => ({
                 name: item.siteName + '',
                 id: item.id + ''
             })));
@@ -55,14 +50,16 @@ function StepFair() {
     }, []);
 
     async function handleSubmit(): Promise<void> {
+        const request: FairRequest= { ...fair, idsFair: selectedItems.map(value => ({ idFair: value })) };
+        
         if (myLocal) {
-            setFair({ ...fair, idsFair: selectedItems.map(value => ({ idFair: value })) });
+            setFair(request);
             changeRoute(SystemRoutes.StepLocality);
         }
         else {
-            validSchema.validate({ selectedItems })
+            validSchema.validate({ feiras: selectedItems})
                 .then(() => {
-                    handleCustomer(fair)
+                    handleCustomer(request)
                         .then(() => {
                             authentication({ email: fair.email, password: fair.password })
                                 .then(async (response) => {
@@ -72,12 +69,12 @@ function StepFair() {
                                 });
                         })
                         .catch(() => {
-                            error('Falha ao registrar. Verifique novamente suas informações.');
+                            showToast('Falha ao registrar. Verifique novamente suas informações.');
                         });
                 })
                 .catch(function (err) {
                     err.errors.map((error: any) => {
-                        warn(`${error as string}`);
+                        showToast(`${error as string}`);
                     });
                 });
         }
@@ -86,7 +83,7 @@ function StepFair() {
     return (
         <View>
             <View style={{ height: "auto", maxHeight: screenHeight }}>
-                <View style={[styles.container, { marginTop: 32 }]}>
+                <View style={[styles.container, { marginTop: 40 }]}>
                     <FairSVG width={148} height={148} style={styles.image} />
 
                     <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de feira livre!</Paragraph>

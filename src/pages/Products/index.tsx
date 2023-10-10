@@ -3,7 +3,6 @@ import { View, Dimensions, ScrollView } from 'react-native';
 import * as yup from 'yup';
 import styles from './style';
 import Contact from '../../components/Contacts';
-import { error, warn, success } from '../../utils/toast-utils';
 import { setLocale } from 'yup';
 import { useNavigate } from '../../hooks/useNavigate';
 import { SystemRoutes } from '../../ts/enums/routes';
@@ -15,6 +14,7 @@ import BackButton from '../../components/BackButton';
 import { Fair } from '../../ts/interfaces/fair-interfaces';
 import { productAssociation, findAllProducts, getCustomerById } from '../../controllers';
 import { Product } from '../../ts/interfaces/product-interfaces';
+import { showToast } from '../../utils/message-utils';
 
 function Products() {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -48,14 +48,14 @@ function Products() {
     async function handleSubmit(): Promise<void> {
         validSchema.validate({ fairs: selectedItems }).then(async () => {
             productAssociation(selectedItems).then(() => {
-                success('Cadastro realizado com sucesso!');
+                showToast('Cadastro realizado com sucesso!');
                 changeRoute(SystemRoutes.Main);
             }).catch(() => {
-                error('Falha ao registrar a nova feira');
+                showToast('Falha ao registrar a nova feira');
             })
         }).catch(function (err) {
             err.errors.map((error: any) => {
-                warn(`${error as string}.`);
+                showToast(`${error as string}.`);
             });
         });
     }
@@ -70,7 +70,7 @@ function Products() {
                         paddingBottom: 0,
                     }}
                 >
-                    <View style={[styles.container, { marginTop: 32 }]}>
+                    <View style={[styles.container, { marginTop: 40 }]}>
                         <BackButton />
 
                         <ProductsSVG width={132} height={132} style={styles.image} />

@@ -67,7 +67,7 @@ const Details = () => {
             idFair={routeParams.id} 
           />
 
-          <View style={[styles.container, { marginTop: 32 }]}>
+          <View style={[styles.container, { marginTop: 40 }]}>
             <BackButton />
 
             <Paragraph style={{ marginTop: 16 }}>

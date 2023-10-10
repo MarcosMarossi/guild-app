@@ -1,20 +1,17 @@
 import React from 'react';
 import { View, ScrollView, Dimensions } from 'react-native';
 import { Button, Paragraph, TextInput } from 'react-native-paper';
-import axios from 'axios';
 import * as yup from 'yup';
 import styles from './style';
-import api from '../../../services';
-import { error, success } from '../../../utils/toast-utils';
 import { useNavigate } from '../../../hooks/useNavigate';
 import { SystemRoutes } from '../../../ts/enums/routes';
-import BackButton from '../../../components/BackButton';
 import { Formik } from 'formik';
 import { FairRequest, Fair, Locality } from '../../../ts/interfaces/fair-interfaces';
 import LocalSVG from '../../../assets/local.svg';
 import { useFarmerContext } from '../../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authentication, handleCustomer, handleFair } from '../../../controllers';
+import { showToast } from '../../../utils/message-utils';
 
 function LocalityStep() {
     const screenHeight: number = Dimensions.get('window').height;
@@ -45,11 +42,11 @@ function LocalityStep() {
                             });
                     })
                     .catch(() => {
-                        error('Falha ao registrar. Verifique novamente suas informações.');
+                        showToast('Falha ao registrar. Verifique novamente suas informações.');
                     });
 
             }).catch(() => {
-                error('Ocorreu um erro ao cadastrar a feira.')
+                showToast('Ocorreu um erro ao cadastrar a feira.')
             });
     }
 
@@ -79,7 +76,7 @@ function LocalityStep() {
                                 paddingBottom: 0,
                             }}
                         >
-                            <View style={[styles.container, { marginTop: 32 }]}>
+                            <View style={[styles.container, { marginTop: 40 }]}>
                                 <LocalSVG width={148} height={148} style={styles.image} />
 
                                 <Paragraph style={{ marginBottom: 8, textAlign: 'justify' }}>

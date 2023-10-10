@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
   image: {
     alignSelf: 'center',
     justifyContent: 'center',
@@ -17,12 +17,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     margin: 0,
-    justifyContent: 'center',   
+    justifyContent: 'center',
   },
   description: {
-      fontSize: 14,
-      justifyContent: 'center',
-      textAlign: 'justify',
+    fontSize: 14,
+    justifyContent: 'center',
+    textAlign: 'justify',
+  },
+  container: {
+    backgroundColor: '#fff',
+    margin: 16,
+    padding: 24,
+    borderRadius: 24
   },
 });
 
