@@ -71,7 +71,7 @@ const Details = () => {
             <BackButton />
 
             <Paragraph style={{ marginTop: 16 }}>
-              Olá, bom vindo(a) a feira: {data.siteName}, ela está disponível nos seguintes períodos: {data.dayWeek}. Venha visitar!
+              Olá, bem-vindo(a) a feira: {data.siteName}, ela está disponível nos seguintes períodos: {data.dayWeek}. Venha visitar!
             </Paragraph>
 
             <FairSVG width={128} height={128} style={styles.image} />

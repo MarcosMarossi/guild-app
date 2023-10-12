@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     description: {
       fontSize: 14,
       justifyContent: "center",
-      textAlign: 'justify'
     },
     modalContainer: {
       backgroundColor: 'white', 
