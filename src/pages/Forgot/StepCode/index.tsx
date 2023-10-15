@@ -38,7 +38,7 @@ const StepCode = () => {
 
                     showToast('Foi enviado o código de verificação com sucesso. Cheque nas mensagens do seu celular.');
                 }).catch(() => {
-                    showToast('Ocorreu um problema ao gerar o código de autorização!');
+                    showToast('Ocorreu um problema ao gerar o código de autorização! Verifique seu número.');
                 });
             }}
         >
@@ -55,7 +55,7 @@ const StepCode = () => {
                                 <LogoSVG width={100} height={100} style={styles.image} />
 
                                 <Paragraph>
-                                    Passo 1: Digite seu número de celular para ser enviado um código de autorização para criar uma nova senha!
+                                    Passo 1: Digite seu número de celular vinculado ao seu cadastro para ser enviado um código de autorização para criar uma nova senha!
                                 </Paragraph>
 
                                 <TextInput

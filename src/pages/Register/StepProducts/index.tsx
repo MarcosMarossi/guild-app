@@ -53,35 +53,34 @@ const StepProducts = () => {
   return (
     <View>
       <View style={{ height: "auto", maxHeight: screenHeight }}>
-        <View style={[styles.container, { marginTop: 40 }]}>
-          <ProductsSVG width={128} height={128} style={styles.image} />
+        <ScrollView
+          horizontal={false}
+          contentContainerStyle={{
+            paddingHorizontal: 0,
+            paddingBottom: 0,
+          }}
+        >
+          <View style={[styles.container, { marginTop: 40 }]}>
+            <ProductsSVG width={128} height={128} style={styles.image} />
+            <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que selecione seus produtos!</Paragraph>
 
-          <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!</Paragraph>
-          
-          <SelectBox
-            selectText='Selecione seus produtos'
-            items={items} 
-            selectedItems={selectedItems} 
-            setSelectedItems={setSelectedItems}                      
-          />
-
-          <ScrollView
-            contentContainerStyle={{
-              paddingHorizontal: 0,
-              paddingBottom: 0,
-            }}
-          >
+            <SelectBox
+              selectText='Selecione seus produtos'
+              items={items}
+              selectedItems={selectedItems}
+              setSelectedItems={setSelectedItems}
+            />
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <Button style={{ margin: 16 }} icon="arrow-left-circle-outline" mode="contained" onPress={handleNavigationToRegister}>
+              <Button style={{ margin: 8 }} icon="arrow-left-circle-outline" mode="contained" onPress={handleNavigationToRegister}>
                 Anterior
               </Button>
-              <Button style={{ margin: 16 }} icon="arrow-right-circle-outline" mode="contained" onPress={handleNavigationToFair}>
+              <Button style={{ margin: 8 }} icon="arrow-right-circle-outline" mode="contained" onPress={handleNavigationToFair}>
                 Próximo
               </Button>
             </View>
             <Contact>Precisa de algum produto não listado? Envie-nos uma mensagem!</Contact>
-          </ScrollView>
-        </View>
+          </View>
+        </ScrollView>
       </View>
     </View>
   );

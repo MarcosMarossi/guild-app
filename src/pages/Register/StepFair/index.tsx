@@ -50,14 +50,14 @@ function StepFair() {
     }, []);
 
     async function handleSubmit(): Promise<void> {
-        const request: FairRequest= { ...fair, idsFair: selectedItems.map(value => ({ idFair: value })) };
-        
+        const request: FairRequest = { ...fair, idsFair: selectedItems.map(value => ({ idFair: value })) };
+
         if (myLocal) {
             setFair(request);
             changeRoute(SystemRoutes.StepLocality);
         }
         else {
-            validSchema.validate({ feiras: selectedItems})
+            validSchema.validate({ feiras: selectedItems })
                 .then(() => {
                     handleCustomer(request)
                         .then(() => {
@@ -83,24 +83,25 @@ function StepFair() {
     return (
         <View>
             <View style={{ height: "auto", maxHeight: screenHeight }}>
-                <View style={[styles.container, { marginTop: 40 }]}>
-                    <FairSVG width={148} height={148} style={styles.image} />
+                <ScrollView
+                    horizontal={false}
+                    contentContainerStyle={{
+                        paddingHorizontal: 0,
+                        paddingBottom: 0,
+                    }}
+                >
+                    <View style={[styles.container, { marginTop: 40 }]}>
+                        <FairSVG width={148} height={148} style={styles.image} />
 
-                    <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de feira livre!</Paragraph>
+                        <Paragraph style={{ marginBottom: 8 }}>Olá, precisamos que preencha as informações de feira livre!</Paragraph>
 
-                    <SelectBox
-                        selectText='Selecione suas feiras'
-                        items={items}
-                        selectedItems={selectedItems}
-                        setSelectedItems={setSelectedItems}
-                    />
-
-                    <ScrollView
-                        contentContainerStyle={{
-                            paddingHorizontal: 0,
-                            paddingBottom: 0,
-                        }}
-                    >
+                        <SelectBox
+                            selectText='Selecione suas feiras'
+                            items={items}
+                            selectedItems={selectedItems}
+                            setSelectedItems={setSelectedItems}
+                        />
+                        
                         <Checkbox.Item
                             style={{ marginTop: 4 }}
                             label='Cadastrar meu local'
@@ -110,17 +111,18 @@ function StepFair() {
                         />
 
                         <View style={styles.button}>
-                            <Button style={{ margin: 16 }} icon='arrow-left-circle-outline' mode="contained" onPress={() => changeRoute(SystemRoutes.StepProduct)}>
+                            <Button style={{ margin: 8 }} icon='arrow-left-circle-outline' mode="contained" onPress={() => changeRoute(SystemRoutes.StepProduct)}>
                                 Anterior
                             </Button>
-                            <Button style={{ margin: 16 }} icon={myLocal ? 'arrow-right-circle-outline' : 'check-decagram-outline'} mode="contained" onPress={handleSubmit}>
+                            <Button style={{ margin: 8 }} icon={myLocal ? 'arrow-right-circle-outline' : 'check-decagram-outline'} mode="contained" onPress={handleSubmit}>
                                 {myLocal ? 'Próximo' : 'Finalizar'}
                             </Button>
                         </View>
 
                         <Contact>Não precisa cadastrar seu ponto de vendas e quer uma feira não listada? Envie-nos uma mensagem!</Contact>
-                    </ScrollView>
-                </View>
+
+                    </View>
+                </ScrollView>
             </View>
         </View>
     );

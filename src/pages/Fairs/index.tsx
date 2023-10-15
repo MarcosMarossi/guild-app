@@ -74,7 +74,7 @@ function Fairs() {
                         <FairSVG width={132} height={132} style={styles.image} />
 
                         <Paragraph>
-                            Olá, precisamos que preencha as informações de usuário para gerenciamento de suas feiras livres!
+                            Olá, precisa atualizar suas feiras livres? Faça a edição aqui!
                         </Paragraph>
 
                         <SelectBox

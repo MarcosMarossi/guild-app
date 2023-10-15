@@ -76,7 +76,7 @@ function Products() {
                         <ProductsSVG width={132} height={132} style={styles.image} />
 
                         <Paragraph style={{ marginBottom: 8 }}>
-                            Olá, precisa atualizar seus produtos?
+                            Olá, precisa atualizar seus produtos? Faça a edição aqui!
                         </Paragraph>
 
                         <SelectBox
